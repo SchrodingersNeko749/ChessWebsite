@@ -1,0 +1,14 @@
+.grid-container {
+    display: inline-grid;
+    grid-template-columns: 128px 128px 128px 128px 128px 128px 128px 128px;
+    grid-template-rows: 128px 128px 128px 128px 128px 128px 128px 128px;
+    background-image: url("blue-marble.jpg");
+  }
+  
+  .grid-item {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    font-size: 30px;
+    color : rgba(0, 0, 0, 1);
+    text-align: center;
+  }

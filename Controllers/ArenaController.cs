@@ -9,20 +9,18 @@ using ChessWebsite.Services;
 
 namespace ChessWebsite.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ArenaController : ControllerBase
+    public class ArenaController : Controller
     {
         public GameManager Arena_GameManager;
         public ArenaController()
         {
             Arena_GameManager = new GameManager();
         }
-        [HttpGet]
-        public bool GetSquareColor(string notation)
+        public IActionResult Index()
         {
-            return Arena_GameManager.Board[notation].IsLightSquare;
+            return View();
         }
+        
     }
 
 }

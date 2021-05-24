@@ -17,21 +17,23 @@ namespace ChessWebsite
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)//IwebHostEnvironment
         {
+            Environment = env;
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment {get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChessWebsite", Version = "v1" });            });
+            services.AddControllersWithViews();
+            //services.AddControllers();
+            // services.AddSwaggerGen(c =>
+            // {
+                // c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChessWebsite", Version = "v1" });            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,22 +42,26 @@ namespace ChessWebsite
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ChessWebsite v1");
-                    c.RoutePrefix = string.Empty;
-                });
+                // app.UseSwagger();
+                // app.UseSwaggerUI(c =>
+                // {
+                    // c.SwaggerEndpoint("/swagger/v1/swagger.json", "ChessWebsite v1");
+                    // c.RoutePrefix = string.Empty;
+                // });
             }
             app.UseHttpsRedirection();
-
+            
             app.UseRouting();
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
+            
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name : "Default",
+                    pattern : "{controller=Arena}/{action=Index}/{id?}");
             });
         }
     }
