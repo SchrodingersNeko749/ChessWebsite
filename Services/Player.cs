@@ -6,7 +6,6 @@ namespace ChessWebsite.Services
         public Player(string name, bool is_white)
         {
             Name = name;
-            Turn = is_white;
         }
         public void GivePieces()
         {   
@@ -29,7 +28,6 @@ namespace ChessWebsite.Services
             Pieces[15] = new Piece('K');//king
         }
         public string Name;
-        public bool Turn;
         public Piece [] Pieces;
     }
 }

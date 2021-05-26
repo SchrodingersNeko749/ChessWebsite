@@ -3,81 +3,82 @@
 <head>
   <link rel="stylesheet" type="text/css" href="css/chessboard.css">
   <script type="text/javascript" src="js/chessboard.js"></script>
+  <script type="text/javascript" src="js/MovePieces.js"></script>
 </head>
 <body>
   <button onclick="SetupBoard()">SetupBoard</button>
   <div class="grid-container">
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div> 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div> 
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div> 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div> 
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div> 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div> 
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div> 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div> 
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div> 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div> 
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div> 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div> 
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div> 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div> 
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div> 
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
-  <div class="grid-item" onmouseover="hover(this)" onmouseout="reset(this)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div> 
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
+  <div class="grid-item" ondragstart="DragStart(event)"ondragend="DragEnd(event)" draggable="true"ondrop="Drop(event)" ondragover="AllowDrop(event)"></div>
 </div>
 </body>
 </html>

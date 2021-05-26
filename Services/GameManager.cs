@@ -5,6 +5,7 @@ namespace ChessWebsite.Services
 {
     public class GameManager
     {
+        public bool isWhiteTurn = true;
         public Dictionary<string,Square> Board = new Dictionary<string, Square>();
         public Player WhitePlayer;
         public Player BlackPlayer;

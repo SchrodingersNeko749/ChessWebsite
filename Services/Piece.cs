@@ -9,6 +9,7 @@ namespace ChessWebsite.Services
         }
         public char Name;
         public bool isWhite; 
-
+        public byte file;
+        public byte rank;
     }
 }
