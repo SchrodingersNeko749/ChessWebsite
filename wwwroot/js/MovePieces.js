@@ -1,16 +1,17 @@
-function dragStart(event) //on drag start
+function DragStart(ev) //on drag start
 {
-    event.dataTransfer.setData("Text", event.target.id);
+  console.log(ev.target)
+    ev.dataTransfer.setData("Text/Plain", ev.target.id);
 }
-function dragEnd(event) //on drag end
-{
-
-}
-function Drop(event)//on drop
+function DragEnd(ev) //on drag end
 {
 
 }
-function AllowDrop()//on drag over
+function Drop(ev)//on drop
+{
+
+}
+function AllowDrop(ev)//on drag over
 {
 
 }
