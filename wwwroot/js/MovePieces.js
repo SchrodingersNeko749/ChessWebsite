@@ -1,19 +1,3 @@
-// function DragStart(ev) //on drag start
-// {
-//   console.log("DragStart")
-// }
-// function DragEnd(ev) //on drag end
-// {
-//   console.log("DragEnd")
-// }
-// function Drop(ev)//on drop
-// {
-//   console.log("Drop")
-// }
-function SelectPiece(ev)
-{
-  
-}
 function Drag(ev)//on drag over
 {
   PickedPiece.style.top = ev.clientY - 64
@@ -21,13 +5,16 @@ function Drag(ev)//on drag over
 }
 function DragStart(ev) {
   PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
+  PickedPiece.style.border = "dashed"
   ev.target.style.backgroundImage = "none"
  }
  
  function DragOver(ev) {
-
+  console.log("dragover")
  }
  
- function Drop(ev) {
+ function DragEnd(ev) {
+  console.log("dragend")
   PickedPiece.style.backgroundImage = "none"
+  PickedPiece.style.border = "none"
  }

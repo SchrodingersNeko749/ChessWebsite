@@ -1,37 +1,53 @@
 let Board = []
-var PickedPiece = document.getElementById("picked-piece");
+var PickedPiece
+
 function SetupBoard()
 {
+    //initiating the picked piece
     PickedPiece = document.getElementById("picked-piece");
-    Board = []
-    document.getElementById("picked-piece").offsetWidth = 128
-    document.getElementById("picked-piece").offsetHeight = 128
-    filenamemap = []
-    filenamemap[0] = 'a';
-    filenamemap[1] = 'b';
-    filenamemap[2] = 'c';
-    filenamemap[3] = 'd';
-    filenamemap[4] = 'e';
-    filenamemap[5] = 'f';
-    filenamemap[6] = 'g';
-    filenamemap[7] = 'h';
-    for (let i = 0; i < 64; i++) 
-    {   
-        file = i % 8
-        rank = Math.floor(((63 - i)/8) + 1) 
-        file = filenamemap[file]
-        rank = "" + rank.toString()
-        name = file + rank
+    //if square elements exists setup pieces 
+    if (document.getElementsByClassName("grid-item").length == 64) {
+        SetupPieces()
+    } else {
+        //setup board array
+        Board.splice(0,Board.length)
+        //this is to name square names. i need to map a number to alphabet
+        filenamemap = []
+        filenamemap[0] = 'a';
+        filenamemap[1] = 'b';
+        filenamemap[2] = 'c';
+        filenamemap[3] = 'd';
+        filenamemap[4] = 'e';
+        filenamemap[5] = 'f';
+        filenamemap[6] = 'g';
+        filenamemap[7] = 'h';
+        //adding the first square object to the board array. this firstSquare element will be used to clone other 63 squares
+        firstSquare = document.getElementsByClassName("grid-item")[0]
 
-        squareElement = document.getElementsByClassName("grid-item")[0].cloneNode(true)
-        document.getElementsByClassName("grid-item")[0].appendChild(squareElement);
-
-        s = new Square(name, "", document.getElementsByClassName("grid-item")[i])
-        Board.push(s)
+        Board.push(new Square("a8", "", firstSquare))
+        for (let i = 1; i < 64; i++) 
+        {   
+            file = i % 8
+            rank = Math.floor(((63 - i)/8) + 1) 
+            file = filenamemap[file]
+            rank = "" + rank.toString()
+            name = file + rank
+    
+            squareElement = firstSquare.cloneNode(true)
+            document.getElementsByClassName("grid-container")[0].appendChild(squareElement);
+    
+            s = new Square(name, "", squareElement)
+            Board.push(s)    
+        }
+        SetupPieces()
     }
-    SetupPieces()
 }
 function SetupPieces() {
+    //making every square between 3rd rank and 5th rank empty
+    for (let i = 16; i < 47; i++) {
+        Board[i].Piece = ""
+        Board[i].PieceElement.style.backgroundImage = "none"
+    }
     //two black rooks
     Board[0].Piece = "bR"
     Board[0].PieceElement.style.backgroundImage = "url(/Pieces/BlackRook.png)";
@@ -123,14 +139,6 @@ function SetupPieces() {
     Board[63-15].Piece = "wP"
     Board[63-15].PieceElement.style.backgroundImage = "url(/Pieces/WhitePawn.png)";
 }
-function hover(square)
-{   
-    square.style.backgroundColor = "rgba(0,114,255,0.3)";
-}
-function reset(square)
-{
-    square.style.backgroundColor = "rgba(255, 255, 255, 0)";
-}
 function GetSquare(squarename)
 {
     for (let i = 0; i < Board.length; i++) {
@@ -147,6 +155,6 @@ class Square
         this.PieceElement = element
     }
     Piece = ""
-    Name = ""
+    Name
     PieceElement
 }

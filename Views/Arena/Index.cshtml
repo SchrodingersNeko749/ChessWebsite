@@ -8,7 +8,7 @@
 <body>
   <button onclick="SetupBoard()">SetupBoard</button>
   <div class="grid-container">
-  <div class="grid-item" draggable="false" onmousedown="SelectPiece(event)" ondrag="Drag(event)" ondragstart="DragStart(event)"ondragend="Drop(event)"></div>
+  <div class="grid-item" draggable="false" ondrag="Drag(event)" ondragstart="DragStart(event)" ondragend="DragEnd(event)"></div>
 </div>
 <div id="picked-piece" ></div>
 </body>
