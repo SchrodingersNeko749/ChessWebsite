@@ -22,6 +22,10 @@ function SetupBoard()
         file = filenamemap[file]
         rank = "" + rank.toString()
         name = file + rank
+
+        squareElement = document.getElementsByClassName("grid-item")[0].cloneNode(true)
+        document.getElementsByClassName("grid-item")[0].appendChild(squareElement);
+
         s = new Square(name, "", document.getElementsByClassName("grid-item")[i])
         Board.push(s)
     }
