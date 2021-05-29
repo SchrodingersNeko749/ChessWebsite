@@ -8,7 +8,8 @@
 <body>
   <button onclick="SetupBoard()">SetupBoard</button>
   <div class="grid-container">
-  <div class="grid-item" draggable="false" ondrag="Drag(event)" ondragstart="DragStart(event)" ondragend="DragEnd(event)"></div>
+  <div class="grid-item" onmousedown="DragStart(event)"></div>
+  @*(i add 63 more grid-item elements in js)*@
 </div>
 <div id="picked-piece" ></div>
 </body>
