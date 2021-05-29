@@ -13,7 +13,6 @@
   #picked-piece{
     display: flex;
     background-image: none;
-    border-style: dashed;
     position: absolute;
     height: 128px;
     width: 128px;
