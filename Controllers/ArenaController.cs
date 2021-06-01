@@ -4,9 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ChessWebsite.Models;
 using ChessWebsite.Services;
-
+using System.Text.Encodings.Web;
 namespace ChessWebsite.Controllers
 {
     public class ArenaController : Controller
@@ -20,7 +19,18 @@ namespace ChessWebsite.Controllers
         {
             return View();
         }
-        
+        public string GetMove()
+        {
+            return Arena_GameManager.RandomSquareName();
+        }       
+        public void SendMove(string square)
+        {
+
+        } 
+        public void GetLegalMovesForPiece(char piece, string square)
+        {
+
+        }
     }
 
 }

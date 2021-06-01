@@ -1,4 +1,4 @@
-namespace ChessWebsite.Services
+namespace ChessWebsite.DTOs
 {
     //--------------------------
     public class Piece

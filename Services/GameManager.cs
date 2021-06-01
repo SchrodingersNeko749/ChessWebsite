@@ -1,12 +1,14 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
-
+using ChessWebsite.DTOs;
 namespace ChessWebsite.Services
 {
     public class GameManager
     {
         public bool isWhiteTurn = true;
-        public Dictionary<string,Square> Board = new Dictionary<string, Square>();
+        public List<string> LegalMoves = new List<string>();
+        public Square[] Board = new Square[64];
         public Player WhitePlayer;
         public Player BlackPlayer;
         public GameManager()
@@ -21,7 +23,7 @@ namespace ChessWebsite.Services
         {
             for (int i = 0; i < 64; i++)
             {
-                Board.Add(Square.SquareName(i), new Square(i));
+                Board[i] = new Square(i);
             }
         }
         private void SetupPlayers(string whitename, string blackname)
@@ -36,43 +38,61 @@ namespace ChessWebsite.Services
 
             // white pieces
 
-            Board["a1"].OccupingPiece = WhitePlayer.Pieces[8];
-            Board["b1"].OccupingPiece = WhitePlayer.Pieces[10];
-            Board["c1"].OccupingPiece = WhitePlayer.Pieces[12];
-            Board["d1"].OccupingPiece = WhitePlayer.Pieces[14];
-            Board["e1"].OccupingPiece = WhitePlayer.Pieces[15];
-            Board["f1"].OccupingPiece = WhitePlayer.Pieces[13];
-            Board["g1"].OccupingPiece = WhitePlayer.Pieces[11];
-            Board["h1"].OccupingPiece = WhitePlayer.Pieces[9];
+            GetSquareByName("a1").OccupingPiece = WhitePlayer.Pieces[8];
+            GetSquareByName("b1").OccupingPiece = WhitePlayer.Pieces[10];
+            GetSquareByName("c1").OccupingPiece = WhitePlayer.Pieces[12];
+            GetSquareByName("d1").OccupingPiece = WhitePlayer.Pieces[14];
+            GetSquareByName("e1").OccupingPiece = WhitePlayer.Pieces[15];
+            GetSquareByName("f1").OccupingPiece = WhitePlayer.Pieces[13];
+            GetSquareByName("g1").OccupingPiece = WhitePlayer.Pieces[11];
+            GetSquareByName("h1").OccupingPiece = WhitePlayer.Pieces[9];
 
-            Board["a2"].OccupingPiece = WhitePlayer.Pieces[0];
-            Board["b2"].OccupingPiece = WhitePlayer.Pieces[1];
-            Board["c2"].OccupingPiece = WhitePlayer.Pieces[2];
-            Board["d2"].OccupingPiece = WhitePlayer.Pieces[3];
-            Board["e2"].OccupingPiece = WhitePlayer.Pieces[4];
-            Board["f2"].OccupingPiece = WhitePlayer.Pieces[5];
-            Board["g2"].OccupingPiece = WhitePlayer.Pieces[6];
-            Board["h2"].OccupingPiece = WhitePlayer.Pieces[7];
+            GetSquareByName("a2").OccupingPiece = WhitePlayer.Pieces[0];
+            GetSquareByName("b2").OccupingPiece = WhitePlayer.Pieces[1];
+            GetSquareByName("c2").OccupingPiece = WhitePlayer.Pieces[2];
+            GetSquareByName("d2").OccupingPiece = WhitePlayer.Pieces[3];
+            GetSquareByName("e2").OccupingPiece = WhitePlayer.Pieces[4];
+            GetSquareByName("f2").OccupingPiece = WhitePlayer.Pieces[5];
+            GetSquareByName("g2").OccupingPiece = WhitePlayer.Pieces[6];
+            GetSquareByName("h2").OccupingPiece = WhitePlayer.Pieces[7];
 
-            // black pieces 
+            // // black pieces 
 
-            Board["a8"].OccupingPiece = BlackPlayer.Pieces[8];
-            Board["b8"].OccupingPiece = BlackPlayer.Pieces[10];
-            Board["c8"].OccupingPiece = BlackPlayer.Pieces[12];
-            Board["d8"].OccupingPiece = BlackPlayer.Pieces[14];
-            Board["e8"].OccupingPiece = BlackPlayer.Pieces[15];
-            Board["f8"].OccupingPiece = BlackPlayer.Pieces[13];
-            Board["g8"].OccupingPiece = BlackPlayer.Pieces[11];
-            Board["h8"].OccupingPiece = BlackPlayer.Pieces[9];
+            GetSquareByName("a8").OccupingPiece = BlackPlayer.Pieces[8];
+            GetSquareByName("b8").OccupingPiece = BlackPlayer.Pieces[10];
+            GetSquareByName("c8").OccupingPiece = BlackPlayer.Pieces[12];
+            GetSquareByName("d8").OccupingPiece = BlackPlayer.Pieces[14];
+            GetSquareByName("e8").OccupingPiece = BlackPlayer.Pieces[15];
+            GetSquareByName("f8").OccupingPiece = BlackPlayer.Pieces[13];
+            GetSquareByName("g8").OccupingPiece = BlackPlayer.Pieces[11];
+            GetSquareByName("h8").OccupingPiece = BlackPlayer.Pieces[9];
 
-            Board["a7"].OccupingPiece = BlackPlayer.Pieces[0];
-            Board["b7"].OccupingPiece = BlackPlayer.Pieces[1];
-            Board["c7"].OccupingPiece = BlackPlayer.Pieces[2];
-            Board["d7"].OccupingPiece = BlackPlayer.Pieces[3];
-            Board["e7"].OccupingPiece = BlackPlayer.Pieces[4];
-            Board["f7"].OccupingPiece = BlackPlayer.Pieces[5];
-            Board["g7"].OccupingPiece = BlackPlayer.Pieces[6];
-            Board["h7"].OccupingPiece = BlackPlayer.Pieces[7];
+            GetSquareByName("a7").OccupingPiece = BlackPlayer.Pieces[0];
+            GetSquareByName("b7").OccupingPiece = BlackPlayer.Pieces[1];
+            GetSquareByName("c7").OccupingPiece = BlackPlayer.Pieces[2];
+            GetSquareByName("d7").OccupingPiece = BlackPlayer.Pieces[3];
+            GetSquareByName("e7").OccupingPiece = BlackPlayer.Pieces[4];
+            GetSquareByName("f7").OccupingPiece = BlackPlayer.Pieces[5];
+            GetSquareByName("g7").OccupingPiece = BlackPlayer.Pieces[6];
+            GetSquareByName("h7").OccupingPiece = BlackPlayer.Pieces[7];
+            
+        }
+        public Square GetSquareByName(string name)
+        {
+            return Board.SingleOrDefault(square => square.Name == name);
+        }
+        public List<string> GetLegalMoves(Square p)
+        {
+            
+
+            return LegalMoves;
+        }
+        public string RandomSquareName()
+        {
+            return Board[Random.RandomNumber(64)].Name;
+        }
+        public void RandomMove()
+        {
             
         }
     }

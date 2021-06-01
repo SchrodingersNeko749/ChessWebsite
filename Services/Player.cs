@@ -1,3 +1,4 @@
+using ChessWebsite.DTOs;
 namespace ChessWebsite.Services
 {
     //--------------------

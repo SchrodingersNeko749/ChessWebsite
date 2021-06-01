@@ -1,21 +1,24 @@
-namespace ChessWebsite.Services
+namespace ChessWebsite.DTOs
 {
     //------------------------
     public class Square 
     {
          public Square(int num)
          {
+            Rank = num / 8 + 1;
+            File = num % 8;
              Name = SquareName(num);
+             
              if (num%2 != 0)
                 IsLightSquare = true;
          }
         public string Name;
         public Piece OccupingPiece;
         public bool IsLightSquare = false;
-        public static string SquareName(int number)
+        public int Rank;
+        public int File;
+        public string SquareName(int number)
          {
-            var file = number % 8;
-            var rank = number / 8 + 1;
             char[] filenamemap = new char[8]; // bad name
             filenamemap[0] = 'a';
             filenamemap[1] = 'b';
@@ -26,8 +29,10 @@ namespace ChessWebsite.Services
             filenamemap[6] = 'g';
             filenamemap[7] = 'h';
 
-            var name = new string($"{filenamemap[file]}{rank}");
+            var name = new string($"{filenamemap[File]}{Rank}");
             return name;
          }
+         
+         
     }
 }
