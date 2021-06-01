@@ -1,3 +1,4 @@
+isWhiteMove = true
 function Drag(ev)//on drag over
 {
   PickedPiece.style.top = ev.clientY - 64
@@ -6,21 +7,28 @@ function Drag(ev)//on drag over
 function DragStart(ev) {
   PickedPiece.style.top = ev.clientY - 64
   PickedPiece.style.left = ev.clientX - 64
-  PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
-  ev.target.style.backgroundImage = "none"
-
-  document.onmousemove = Drag
-  document.onmouseup = DragEnd
+  //if its white's move
+  if (isWhiteMove && ev.target.style.backgroundImage[13] == 'W') {
+      PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
+      ev.target.style.backgroundImage = "none"
+      document.onmousemove = Drag
+      document.onmouseup = DragEnd
+      isWhiteMove = false
+  }
+  else{
+    //if its blacks move
+    if(!isWhiteMove && ev.target.style.backgroundImage[13] == 'B'){
+      PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
+      ev.target.style.backgroundImage = "none"
+      document.onmousemove = Drag
+      document.onmouseup = DragEnd
+      isWhiteMove = true
+    }
+    else
+      console.log("its not your move")
+  }
  }
  
- function DragOver(ev) {
-  ev.target.style.backgroundImage = "yellow"
- }
- function DragOut(ev)
- {
-  ev.target.style.backgroundImage = "none"
-
- }
  function DragEnd(ev) {
 
   document.onmouseup = null
@@ -48,8 +56,9 @@ function DragStart(ev) {
       }
     }
 }
-function SendMoveToAPI()
+function SendMoveToAPI(currentsquare, targetsquare)
 {
+  console.log(currentsquare, targetsquare)
   let request = new XMLHttpRequest()
   request.open
 }
