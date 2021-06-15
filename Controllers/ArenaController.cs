@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ChessWebsite.Services;
+using ChessWebsite.DTOs;
 using System.Text.Encodings.Web;
 namespace ChessWebsite.Controllers
 {
@@ -19,18 +20,15 @@ namespace ChessWebsite.Controllers
         {
             return View();
         }
-        public string GetMove()
+        public ActionResult<Move> GetMove()
         {
-            return Arena_GameManager.RandomSquareName();
-        }       
-        public void SendMove(string square)
+            return Arena_GameManager.RandomMove();
+        }    
+        public void SendMove(string currentsquare, string targetsquare)
         {
-
-        } 
-        public void GetLegalMovesForPiece(char piece, string square)
-        {
-
+            new Move(Board.GetSquareByName(currentsquare),Board.GetSquareByName(targetsquare));
         }
+
     }
 
 }

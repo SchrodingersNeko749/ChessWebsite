@@ -1,4 +1,5 @@
 using ChessWebsite.DTOs;
+using System.Collections.Generic;
 namespace ChessWebsite.Services
 {
     //--------------------
@@ -7,28 +8,35 @@ namespace ChessWebsite.Services
         public Player(string name, bool is_white)
         {
             Name = name;
+            isWhite = is_white;
+            Pieces = new Square[16];
         }
-        public void GivePieces()
-        {   
-            Pieces = new Piece[64];
-            Pieces[0] = new Piece('P');//eight pawns
-            Pieces[1] = new Piece('P');
-            Pieces[2] = new Piece('P'); 
-            Pieces[3] = new Piece('P');
-            Pieces[4] = new Piece('P');
-            Pieces[5] = new Piece('P');
-            Pieces[6] = new Piece('P');
-            Pieces[7] = new Piece('P');
-            Pieces[8] = new Piece('R');//two rooks
-            Pieces[9] = new Piece('R');
-            Pieces[10] = new Piece('N');//two knights
-            Pieces[11] = new Piece('N');
-            Pieces[12] = new Piece('B');//two bishops
-            Pieces[13] = new Piece('B');
-            Pieces[14] = new Piece('Q');//queen
-            Pieces[15] = new Piece('K');//king
+        public void GetLegalMoves()
+        {
+            foreach (Square piece in Pieces)
+            {
+                if(piece.OccupingPiece[1] == 'P')
+                {
+                    var pawn1square = Board.ChessBoard[(piece.Rank-2)*8 + piece.File];
+                    var pawn2square = Board.ChessBoard[(piece.Rank-3)*8 + piece.File];
+                    var pawncaptureright = Board.ChessBoard[(piece.Rank-2)*8 + piece.File+1];
+                    var pawncaptureleft = Board.ChessBoard[(piece.Rank-2)*8 + piece.File-1];
+                    if(pawn1square.OccupingPiece == "")
+                        LegalMoves.Add(new Move(piece, pawn1square));
+                    if(pawn2square.OccupingPiece == "" && piece.Rank == 7)
+                        LegalMoves.Add(new Move(piece, pawn2square));
+                    if(pawncaptureleft.OccupingPiece != "")
+                        LegalMoves.Add(new Move(piece, pawncaptureleft));
+                    if(pawncaptureright.OccupingPiece != "")
+                        LegalMoves.Add(new Move(piece, pawncaptureright));                    
+                }
+                
+            }
         }
+        public bool isChecked = false;
         public string Name;
-        public Piece [] Pieces;
+        public Square [] Pieces;// squares for pieces 
+        public List<Move> LegalMoves = new List<Move>();
+        private bool isWhite;
     }
 }

@@ -1,10 +1,19 @@
 isWhiteMove = true
+SelectedSquare
+TargetedSquare
 function Drag(ev)//on drag over
 {
   PickedPiece.style.top = ev.clientY - 64
   PickedPiece.style.left = ev.clientX - 64
 }
 function DragStart(ev) {
+  //find the Selected square
+  x = Math.floor((ev.clientX - Board[0].PieceElement.offsetLeft) / 128)
+  y = Math.floor((ev.clientY - Board[0].PieceElement.offsetTop) / 128)
+
+  index = y*8 + x
+  SelectedSquare = Board[index]
+
   PickedPiece.style.top = ev.clientY - 64
   PickedPiece.style.left = ev.clientX - 64
   //if its white's move
@@ -38,27 +47,44 @@ function DragStart(ev) {
   y = Math.floor((ev.clientY - Board[0].PieceElement.offsetTop) / 128)
 
   index = y*8 + x
-  Board[index].PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
-  PickedPiece.style.backgroundImage = "none"
-  PickedPiece.style.top = Board[63].PieceElement.offsetTop + 128
-  GetMoveFromAPI()
+  TargetedSquare = Board[index]
+  if(TargetedSquare != SelectedSquare)
+  {
+    console.log(TargetedSquare.Name,SelectedSquare.Name)
+    TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+    PickedPiece.style.backgroundImage = "none"
+    PickedPiece.style.top = Board[63].PieceElement.offsetTop + 128
+    SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name)
+    GetMoveFromAPI()
+  }
+  else{
+    SelectedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+    PickedPiece.style.backgroundImage = "none"
+    PickedPiece.style.top = Board[63].PieceElement.offsetTop + 128
+    isWhiteMove = !isWhiteMove
+  }
  }
- function GetMoveFromAPI()
+// a function that computer uses to make a move
+function PlayMove(current_squarename, target_squarename)
 {
-    let request = new XMLHttpRequest()
-    request.open("GET", "https://localhost:5001/Arena/GetMove/")
-    request.send();
-    request.onload = () => {
-      
-      if(request.status == 200)
-      {
-        GetSquare(request.responseText).PieceElement.style.backgroundColor = "rgba(46, 134, 193, 0.5)"
-      }
+  currentSquare = GetSquare(current_squarename)
+  targetSquare = GetSquare(target_squarename)
+  //if its white's move
+  if (isWhiteMove && currentSquare.PieceElement.style.backgroundImage[13] == 'W') {
+    targetSquare.PieceElement.style.backgroundImage = currentSquare.PieceElement.style.backgroundImage
+    currentSquare.PieceElement.style.backgroundImage = "none"
+    isWhiteMove = false
+    SendMoveToAPI(current_squarename, target_squarename)
+  }
+  else{
+    //if its black's move
+    if(!isWhiteMove && currentSquare.PieceElement.style.backgroundImage[13] == 'B'){
+    targetSquare.PieceElement.style.backgroundImage = currentSquare.PieceElement.style.backgroundImage
+    currentSquare.PieceElement.style.backgroundImage = "none"
+    isWhiteMove = true
+    SendMoveToAPI(current_squarename, target_squarename)
     }
-}
-function SendMoveToAPI(currentsquare, targetsquare)
-{
-  console.log(currentsquare, targetsquare)
-  let request = new XMLHttpRequest()
-  request.open
+    else
+      console.log("its not your move")
+  }
 }

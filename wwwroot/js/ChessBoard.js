@@ -44,7 +44,7 @@ function SetupBoard()
 }
 function SetupPieces() {
     //making every square between 3rd rank and 5th rank empty
-    for (let i = 16; i < 47; i++) {
+    for (let i = 16; i < 48; i++) {
         Board[i].Piece = ""
         Board[i].PieceElement.style.backgroundImage = "none"
     }

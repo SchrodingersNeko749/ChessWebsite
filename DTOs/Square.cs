@@ -7,17 +7,17 @@ namespace ChessWebsite.DTOs
          {
             Rank = num / 8 + 1;
             File = num % 8;
-             Name = SquareName(num);
+            Name = SquareName(num);
              
-             if (num%2 != 0)
-                IsLightSquare = true;
+            if (num%2 != 0)
+               IsLightSquare = true;
          }
         public string Name;
-        public Piece OccupingPiece;
+        public string OccupingPiece = "";
         public bool IsLightSquare = false;
         public int Rank;
         public int File;
-        public string SquareName(int number)
+        private string SquareName(int number)
          {
             char[] filenamemap = new char[8]; // bad name
             filenamemap[0] = 'a';
