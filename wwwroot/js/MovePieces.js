@@ -1,6 +1,7 @@
 isWhiteMove = true
-SelectedSquare
-TargetedSquare
+let SelectedSquare
+let TargetedSquare
+let LegalSquares = []
 //------------------------------------------------------------------------
 function Drag(ev)//on drag over
 {
@@ -22,6 +23,7 @@ function DragStart(ev) {
   if (isWhiteMove && ev.target.style.backgroundImage[13] == 'W') {
       PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
       ev.target.style.backgroundImage = "none"
+      GetMoveFromAPI(SelectedSquare.Name)
       document.onmousemove = Drag
       document.onmouseup = DragEnd
   }
@@ -30,6 +32,7 @@ function DragStart(ev) {
     if(!isWhiteMove && ev.target.style.backgroundImage[13] == 'B'){
       PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
       ev.target.style.backgroundImage = "none"
+      GetMoveFromAPI(SelectedSquare.Name)
       document.onmousemove = Drag
       document.onmouseup = DragEnd
     }
@@ -39,7 +42,7 @@ function DragStart(ev) {
  }
  //------------------------------------------------------------------------
  function DragEnd(ev) {
-
+  deColorBoard()
   document.onmouseup = null
   document.onmousemove = null
   
@@ -48,7 +51,8 @@ function DragStart(ev) {
 
   index = y*8 + x
   TargetedSquare = Board[index]
-  if(TargetedSquare != SelectedSquare)
+  console.log(LegalSquares.indexOf(TargetedSquare.Name))
+  if(TargetedSquare != SelectedSquare && LegalSquares.indexOf(TargetedSquare.Name) != -1)
   {
     console.log(SelectedSquare.Name,TargetedSquare.Name)
     TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
@@ -88,3 +92,11 @@ function PlayMove(current_squarename, target_squarename)
   }
   isWhiteMove = !isWhiteMove
 }
+ //------------------------------------------------------------------------
+ function Promotion(targetsquare, promotingpiece)
+ {
+   if(promotingpiece == "wQ")
+      targetsquare.PieceElement.backgroundImage = "url(/Pieces/WhiteQueen.png)"
+   if(promotingpiece == "bQ")
+      targetsquare.PieceElement.backgroundImage = "url(/Pieces/BlackQueen.png)"
+ } 

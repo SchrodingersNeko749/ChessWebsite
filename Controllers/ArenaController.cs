@@ -20,9 +20,9 @@ namespace ChessWebsite.Controllers
         {
             return View();
         }
-        public IEnumerable<Move> GetMove()
+        public IEnumerable<Move> GetMove(string currentsquare)
         {
-            return Arena_GameManager.LegalMoves();
+            return Arena_GameManager.LegalMovesForPiece(currentsquare);
             //return Arena_GameManager.RandomMove();
         }    
         public void SendMove(string currentsquare, string targetsquare)

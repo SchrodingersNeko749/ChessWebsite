@@ -15,18 +15,28 @@ namespace ChessWebsite.Services
             board_context.BlackPlayer.CalculateLegalMoves();
             return board_context.BlackPlayer.LegalMoves[Random.RandomNumber(board_context.BlackPlayer.LegalMoves.Count)];
         }
-        public List<Move> LegalMoves()
+        public List<Move> LegalMovesForPiece(string currentsquarename)
         {
+            List<Move> LegalListSubset = new List<Move>();
             if(isWhiteTurn)
             {
                 board_context.WhitePlayer.CalculateLegalMoves();
-                return board_context.WhitePlayer.LegalMoves;
+                foreach (var mv in board_context.WhitePlayer.LegalMoves)
+                {
+                    if(mv.CurrentSquareName == currentsquarename)
+                        LegalListSubset.Add(mv);
+                }
             }
             else
             {
                 board_context.BlackPlayer.CalculateLegalMoves();
-                return board_context.BlackPlayer.LegalMoves;
+                foreach (var mv in board_context.BlackPlayer.LegalMoves)
+                {
+                    if(mv.CurrentSquareName == currentsquarename)
+                        LegalListSubset.Add(mv);
+                }
             }
+            return LegalListSubset;
         }
         public void PlayMove(Move move)
         {
