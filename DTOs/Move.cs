@@ -3,12 +3,12 @@ using System;
  {
      public class Move
      {
-         public Move(Square currentsquare, Square targetsquare)
+         public Move(string currentsquare, string targetsquare)
          {
-             CurrentSquare = currentsquare.Name;
-             TargetSquare = targetsquare.Name;
+             CurrentSquareName = currentsquare;
+             TargetSquareName = targetsquare;
          }
-         public string CurrentSquare { get; set; }
-         public string TargetSquare { get; set; }
+         public string CurrentSquareName { get; set; }
+         public string TargetSquareName { get; set; }
      }
  }

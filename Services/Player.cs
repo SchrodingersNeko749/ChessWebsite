@@ -1,4 +1,5 @@
 using ChessWebsite.DTOs;
+using System.Linq;
 using System.Collections.Generic;
 namespace ChessWebsite.Services
 {
@@ -11,27 +12,93 @@ namespace ChessWebsite.Services
             isWhite = is_white;
             Pieces = new Square[16];
         }
-        public void GetLegalMoves()
+        public void CalculateLegalMoves()
         {
+            LegalMoves.Clear();
             foreach (Square piece in Pieces)
             {
+                if(piece == null || piece.OccupingPiece == "")
+                {
+                    continue;
+                }
                 if(piece.OccupingPiece[1] == 'P')
                 {
-                    var pawn1square = Board.ChessBoard[(piece.Rank-2)*8 + piece.File];
-                    var pawn2square = Board.ChessBoard[(piece.Rank-3)*8 + piece.File];
-                    var pawncaptureright = Board.ChessBoard[(piece.Rank-2)*8 + piece.File+1];
-                    var pawncaptureleft = Board.ChessBoard[(piece.Rank-2)*8 + piece.File-1];
-                    if(pawn1square.OccupingPiece == "")
-                        LegalMoves.Add(new Move(piece, pawn1square));
-                    if(pawn2square.OccupingPiece == "" && piece.Rank == 7)
-                        LegalMoves.Add(new Move(piece, pawn2square));
-                    if(pawncaptureleft.OccupingPiece != "")
-                        LegalMoves.Add(new Move(piece, pawncaptureleft));
-                    if(pawncaptureright.OccupingPiece != "")
-                        LegalMoves.Add(new Move(piece, pawncaptureright));                    
+                    CalculatePawnMoves(piece);              
                 }
                 
             }
+        }
+        private void CalculatePawnMoves(Square pawn)
+        {
+            if(isWhite) //pawns go up
+            {
+                var pawn1square = Board.ChessBoard[((pawn.Rank-1)+1)*8 + pawn.File];
+                var pawn2square = Board.ChessBoard[((pawn.Rank-1)+2)*8 + pawn.File];
+                var pawncaptureright = Board.ChessBoard[((pawn.Rank-1)+1)*8 + pawn.File+1];
+                var pawncaptureleft = Board.ChessBoard[((pawn.Rank-1)+1)*8 + pawn.File-1];
+                if(pawn1square.OccupingPiece == "")
+                    LegalMoves.Add(new Move(pawn.Name, pawn1square.Name));
+                if(pawn1square.OccupingPiece == "" && pawn2square.OccupingPiece == "" && pawn.Rank == 2)
+                    LegalMoves.Add(new Move(pawn.Name, pawn2square.Name));
+                if(pawncaptureleft.OccupingPiece != "")     
+                {
+                    if(pawncaptureleft.OccupingPiece[0] == 'b')
+                        LegalMoves.Add(new Move(pawn.Name, pawncaptureleft.Name));    
+                } 
+                if(pawncaptureright.OccupingPiece != "")     
+                {
+                    if(pawncaptureright.OccupingPiece[0] == 'b')
+                        LegalMoves.Add(new Move(pawn.Name, pawncaptureright.Name));    
+                }         
+                 
+            }
+            else // pawns go down
+            {
+                var pawn1square = Board.ChessBoard[((pawn.Rank-1)-1)*8 + pawn.File];
+                var pawn2square = Board.ChessBoard[((pawn.Rank-1)-2)*8 + pawn.File];
+                var pawncaptureright = Board.ChessBoard[((pawn.Rank-1)-1)*8 + pawn.File+1];
+                var pawncaptureleft = Board.ChessBoard[((pawn.Rank-1)-1)*8 + pawn.File-1];
+
+                if(pawn1square.OccupingPiece == "")
+                    LegalMoves.Add(new Move(pawn.Name, pawn1square.Name));
+                if(pawn1square.OccupingPiece == "" && pawn2square.OccupingPiece == "" && pawn.Rank == 7)
+                    LegalMoves.Add(new Move(pawn.Name, pawn2square.Name));
+                if(pawn1square.OccupingPiece == "")
+                    LegalMoves.Add(new Move(pawn.Name, pawn1square.Name));
+                if(pawn1square.OccupingPiece == "" && pawn2square.OccupingPiece == "" && pawn.Rank == 2)
+                    LegalMoves.Add(new Move(pawn.Name, pawn2square.Name));
+                if(pawncaptureleft.OccupingPiece != "")     
+                {
+                    if(pawncaptureleft.OccupingPiece[0] == 'w')
+                        LegalMoves.Add(new Move(pawn.Name, pawncaptureleft.Name));    
+                } 
+                if(pawncaptureright.OccupingPiece != "")     
+                {
+                    if(pawncaptureright.OccupingPiece[0] == 'w')
+                        LegalMoves.Add(new Move(pawn.Name, pawncaptureright.Name));    
+                }   
+
+            }
+        }
+        private void CalculateRookMoves(Square rook)
+        {
+
+        }
+        private void CalculateQueenMoves(Square queen)
+        {
+
+        }
+        private void CalculateBishopMoves(Square bishop)
+        {
+
+        }
+        private void CalculateKnightMoves(Square knight)
+        {
+
+        }
+        private void CalculateKingMoves(Square king)
+        {
+
         }
         public bool isChecked = false;
         public string Name;

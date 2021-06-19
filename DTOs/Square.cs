@@ -12,11 +12,11 @@ namespace ChessWebsite.DTOs
             if (num%2 != 0)
                IsLightSquare = true;
          }
-        public string Name;
+        public string Name {get; set;}
         public string OccupingPiece = "";
         public bool IsLightSquare = false;
-        public int Rank;
-        public int File;
+        public int Rank {get; set;}
+        public int File {get; set;}
         private string SquareName(int number)
          {
             char[] filenamemap = new char[8]; // bad name

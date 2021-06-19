@@ -20,13 +20,14 @@ namespace ChessWebsite.Controllers
         {
             return View();
         }
-        public ActionResult<Move> GetMove()
+        public IEnumerable<Move> GetMove()
         {
-            return Arena_GameManager.RandomMove();
+            return Arena_GameManager.LegalMoves();
+            //return Arena_GameManager.RandomMove();
         }    
         public void SendMove(string currentsquare, string targetsquare)
         {
-            new Move(Board.GetSquareByName(currentsquare),Board.GetSquareByName(targetsquare));
+            Arena_GameManager.PlayMove(new Move(currentsquare,targetsquare));
         }
 
     }

@@ -40,6 +40,7 @@ function SetupBoard()
             Board.push(s)    
         }
         SetupPieces()
+        GetMoveFromAPI()
     }
 }
 function SetupPieces() {
@@ -144,6 +145,21 @@ function GetSquare(squarename)
     for (let i = 0; i < Board.length; i++) {
         if(squarename == Board[i].Name)     
             return Board[i]
+    }
+}
+function ColorSquare(squarename, color)
+{
+    sq = GetSquare(squarename)
+    sq.PieceElement.style.backgroundColor = color
+    sq.PieceElement.style.border = "solid"
+    sq.PieceElement.style.borderColor = "white"
+}
+function deColorBoard()
+{
+    for (let i = 0; i < Board.length; i++) {
+        Board[i].PieceElement.style.backgroundColor = "transparent"
+        Board[i].PieceElement.style.border = "none"
+        Board[i].PieceElement.style.borderColor = "transparent"
     }
 }
 class Square
