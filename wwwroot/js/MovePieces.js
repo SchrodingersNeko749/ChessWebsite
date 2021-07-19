@@ -1,6 +1,6 @@
 isWhiteMove = true
-let SelectedSquare
-let TargetedSquare
+let SelectedSquare = ""
+let TargetedSquare = ""
 let LegalSquares = []
 //------------------------------------------------------------------------
 function Drag(ev)//on drag over
@@ -15,15 +15,21 @@ function DragStart(ev) {
   y = Math.floor((ev.clientY - Board[0].PieceElement.offsetTop) / 128)
 
   index = y*8 + x
-  SelectedSquare = Board[index]
-
+  if(SelectedSquare == "" || SelectedSquare != Board[index])
+  {
+    LegalSquares.splice(0, LegalSquares.length)
+    SelectedSquare = Board[index]
+    GetMoveFromAPI(SelectedSquare.Name)
+  }
+  ColorLegalSquares()
   PickedPiece.style.top = ev.clientY - 64
   PickedPiece.style.left = ev.clientX - 64
+
   //if its white's move
   if (isWhiteMove && ev.target.style.backgroundImage[13] == 'W') {
       PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
       ev.target.style.backgroundImage = "none"
-      GetMoveFromAPI(SelectedSquare.Name)
+
       document.onmousemove = Drag
       document.onmouseup = DragEnd
   }
@@ -32,7 +38,7 @@ function DragStart(ev) {
     if(!isWhiteMove && ev.target.style.backgroundImage[13] == 'B'){
       PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
       ev.target.style.backgroundImage = "none"
-      GetMoveFromAPI(SelectedSquare.Name)
+
       document.onmousemove = Drag
       document.onmouseup = DragEnd
     }
@@ -52,7 +58,7 @@ function DragStart(ev) {
   index = y*8 + x
   TargetedSquare = Board[index]
   console.log(LegalSquares.indexOf(TargetedSquare.Name))
-  if(TargetedSquare != SelectedSquare && LegalSquares.indexOf(TargetedSquare.Name) != -1)
+  if(TargetedSquare != SelectedSquare && LegalSquares.indexOf(TargetedSquare.Name) != -1) //if destination square of the move exists in LegalSquares
   {
     console.log(SelectedSquare.Name,TargetedSquare.Name)
     TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
@@ -61,7 +67,7 @@ function DragStart(ev) {
     SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name)
     isWhiteMove = !isWhiteMove
   }
-  else{
+  else{ // is not a legal move
     SelectedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
     PickedPiece.style.backgroundImage = "none"
     PickedPiece.style.top = Board[63].PieceElement.offsetTop + 128

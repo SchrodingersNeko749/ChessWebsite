@@ -27,7 +27,7 @@ namespace ChessWebsite.Controllers
         }    
         public void SendMove(string currentsquare, string targetsquare)
         {
-            Arena_GameManager.PlayMove(new Move(currentsquare,targetsquare));
+            Arena_GameManager.PlayMove(currentsquare,targetsquare);
         }
 
     }

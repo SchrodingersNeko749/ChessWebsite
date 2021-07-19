@@ -40,7 +40,7 @@ function SetupBoard()
             Board.push(s)    
         }
         SetupPieces()
-        GetMoveFromAPI()
+        //GetMoveFromAPI()
     }
 }
 function SetupPieces() {
@@ -161,6 +161,12 @@ function deColorBoard()
         Board[i].PieceElement.style.border = "none"
         Board[i].PieceElement.style.borderColor = "transparent"
     }
+}
+function ColorLegalSquares()
+{
+    LegalSquares.forEach(square => {
+          ColorSquare(square, "rgba(255, 0, 77, 0.23)")
+      });
 }
 class Square
 {

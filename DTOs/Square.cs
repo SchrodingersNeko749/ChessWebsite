@@ -5,18 +5,16 @@ namespace ChessWebsite.DTOs
     {
          public Square(int num)
          {
-            Rank = num / 8 + 1;
+            Rank = num / 8 +1;
             File = num % 8;
+            SquareIndex = (Rank-1)*8 + File;
             Name = SquareName(num);
-             
-            if (num%2 != 0)
-               IsLightSquare = true;
          }
         public string Name {get; set;}
         public string OccupingPiece = "";
-        public bool IsLightSquare = false;
         public int Rank {get; set;}
         public int File {get; set;}
+        public int SquareIndex {get; set;}
         private string SquareName(int number)
          {
             char[] filenamemap = new char[8]; // bad name
@@ -32,7 +30,7 @@ namespace ChessWebsite.DTOs
             var name = new string($"{filenamemap[File]}{Rank}");
             return name;
          }
-         
+
          
     }
 }

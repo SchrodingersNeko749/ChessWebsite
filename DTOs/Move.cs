@@ -8,14 +8,14 @@ using System;
              CurrentSquareName = currentsquare;
              TargetSquareName = targetsquare;
          }
-         public Move(string currentsquare, string targetsquare, string promote)
+         public Move(string currentsquare, string targetsquare, string specialmove)
          {
              CurrentSquareName = currentsquare;
              TargetSquareName = targetsquare;
-             PromoteToPiece = promote;
+             SpecialMove = specialmove;
          }
-         public string CurrentSquareName { get; set; }
-         public string TargetSquareName { get; set; }
-         public string PromoteToPiece {get; set;}
+         public string CurrentSquareName { get; set; }// this needs to become type Move
+         public string TargetSquareName { get; set; }// this needs to become type Move
+         public string SpecialMove {get; set;}
      }
  }
