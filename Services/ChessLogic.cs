@@ -36,22 +36,22 @@ namespace ChessWebsite.DTOs
              if(pawn.OccupingPiece[0] == 'w') //pawns go up
              {
                  //pawn forward move
-                 pawn1square = Board.GetSquareByRankAndFile(pawn.Rank, pawn.File);
+                 pawn1square = Board.GetSquareByRankAndFile(pawn.Rank+1, pawn.File);
                  if(pawn1square.OccupingPiece == "")
                  if(pawn.Rank == 7)//if its promotion
                     LegalMoves.Add(new Move(pawn.Name, pawn1square.Name, "promotion"));
                 else
                     LegalMoves.Add(new Move(pawn.Name, pawn1square.Name));
 
-                if(pawn.Rank == 2)
+                if(pawn.Rank == 1)
                  {
-                    pawn2square = Board.GetSquareByRankAndFile(pawn.Rank+1, pawn.File);     
+                    pawn2square = Board.GetSquareByRankAndFile(pawn.Rank+2, pawn.File);     
                     LegalMoves.Add(new Move(pawn.Name, pawn2square.Name));
                  }
                  //pawn captures
                  if(pawn.File>0)
                  {
-                    pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank, pawn.File-1);
+                    pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank+1, pawn.File-1);
                     if(pawncaptureleft.OccupingPiece != "" && pawncaptureleft.OccupingPiece[0] == 'b')
                     {
                         if(pawn.Rank == 7)//if its promotion
@@ -62,7 +62,7 @@ namespace ChessWebsite.DTOs
                  }
                  if(pawn.File<7)
                  {
-                    pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank, pawn.File+1);
+                    pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank+1, pawn.File+1);
                     if(pawncaptureright.OccupingPiece != "" && pawncaptureright.OccupingPiece[0] == 'b')
                     {
                         if(pawn.Rank == 7)//if its promotion
@@ -76,20 +76,22 @@ namespace ChessWebsite.DTOs
              else // pawns go down
              {
                  //pawn forward move
-                 pawn1square = Board.GetSquareByRankAndFile(pawn.Rank-2, pawn.File);
-                 if(pawn.Rank == 2)//if its promotion
+                 pawn1square = Board.GetSquareByRankAndFile(pawn.Rank-1, pawn.File);
+                 if(pawn1square.OccupingPiece == "")
+                 if(pawn.Rank == 1)//if its promotion
                     LegalMoves.Add(new Move(pawn.Name, pawn1square.Name, "promotion"));
                 else
                     LegalMoves.Add(new Move(pawn.Name, pawn1square.Name));
-                 if(pawn.Rank == 7)
+
+                if(pawn.Rank == 6)
                  {
-                    pawn2square = Board.GetSquareByRankAndFile(pawn.Rank-3, pawn.File);     
+                    pawn2square = Board.GetSquareByRankAndFile(pawn.Rank-2, pawn.File);     
                     LegalMoves.Add(new Move(pawn.Name, pawn2square.Name));
                  }
                  //pawn captures
                  if(pawn.File>0)
                  {
-                    pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank-2, pawn.File-1);
+                    pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank-1, pawn.File-1);
                     if(pawncaptureleft.OccupingPiece != "" && pawncaptureleft.OccupingPiece[0] == 'w')
                      {
                         if(pawn.Rank == 2)//if its promotion
@@ -100,7 +102,7 @@ namespace ChessWebsite.DTOs
                  }
                  if(pawn.File<7)
                  {
-                    pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank-2, pawn.File+1);
+                    pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank-1, pawn.File+1);
                     if(pawncaptureright.OccupingPiece != "" && pawncaptureright.OccupingPiece[0] == 'w')
                       {
                         if(pawn.Rank == 2)//if its promotion
@@ -119,21 +121,27 @@ namespace ChessWebsite.DTOs
         private void CalculateQueenMoves(Square queen)
         {
             Square targetsquare;
-            for(int i = queen.Rank; i < 8 ; i++)
-            {
-                var i2 = 9-i;
-                targetsquare = Board.GetSquareByRankAndFile(i,queen.File);
-                targetsquare = Board.GetSquareByRankAndFile(i2,queen.File);
-                if (targetsquare.OccupingPiece!= "")
-                {
-                    if(targetsquare.OccupingPiece [0] != queen.OccupingPiece[0])
-                        LegalMoves.Add(new Move(queen.Name, targetsquare.Name));
-                    
-                    break;
-                }
-                else
-                    LegalMoves.Add(new Move(queen.Name, targetsquare.Name));
-            }
+            for(int f = -1; f <= 1; f++)
+                for(int r = -1; r <= 1; r++)
+                    for(int length = 1; length<9 ; length++)
+                    if(r != 0 || f != 0)
+                    {
+                        var newr = queen.Rank + r*length;
+                        var newf = queen.File + f*length;
+                        if(newr >= 0 && newr <8 &&  newf>=0 && newf<8)
+                        {
+                            targetsquare = Board.GetSquareByRankAndFile(newr, newf);
+                            if (targetsquare.OccupingPiece!= "")
+                             {
+                                 if(targetsquare.OccupingPiece [0] != queen.OccupingPiece[0])
+                                     LegalMoves.Add(new Move(queen.Name, targetsquare.Name));
+                                    break;
+                             }
+                             else
+                                 LegalMoves.Add(new Move(queen.Name, targetsquare.Name));
+                        }
+
+                    }
         }
         private void CalculateBishopMoves(Square bishop)
         {

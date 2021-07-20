@@ -5,9 +5,9 @@ namespace ChessWebsite.DTOs
     {
          public Square(int num)
          {
-            Rank = num / 8 +1;
+            Rank = num / 8;
             File = num % 8;
-            SquareIndex = (Rank-1)*8 + File;
+            SquareIndex = Rank*8 + File;
             Name = SquareName(num);
          }
         public string Name {get; set;}
@@ -27,7 +27,7 @@ namespace ChessWebsite.DTOs
             filenamemap[6] = 'g';
             filenamemap[7] = 'h';
 
-            var name = new string($"{filenamemap[File]}{Rank}");
+            var name = new string($"{filenamemap[File]}{Rank+1}");
             return name;
          }
 
