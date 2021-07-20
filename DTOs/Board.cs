@@ -2,20 +2,20 @@ using ChessWebsite.Services;
 using System.Linq;
 namespace ChessWebsite.DTOs
 {
-    public class Board
+    public static class Board
     {
-        public Square[] ChessBoard = new Square[64];
-        public Player WhitePlayer {get;set;}
-        public Player BlackPlayer {get;set;}
-        public Board (string whitename, string blackname)
+        public static Square[] ChessBoard = new Square[64];
+        public static Player WhitePlayer {get;set;}
+        public static Player BlackPlayer {get;set;}
+        static Board ()
         {
-            WhitePlayer = new Player(whitename, true);
-            BlackPlayer = new Player(blackname, false);
+            WhitePlayer = new Player("whitename", true);
+            BlackPlayer = new Player("blackname", false);
             SetupBoard();
             SetupPieces();
         
         }
-        private void SetupPieces()
+        private static void SetupPieces()
         {
             // white pieces
             GetSquareByName("a1").OccupingPiece = "wR";
@@ -55,20 +55,20 @@ namespace ChessWebsite.DTOs
             GetSquareByName("g7").OccupingPiece = "bP";
             GetSquareByName("h7").OccupingPiece = "bP";
         }
-        private void SetupBoard()
+        private static void SetupBoard()
         {
             for (int i = 0; i < 64; i++)
             {
                 ChessBoard[i] = new Square(i);
             }
         }
-        public Square GetSquareByName(string name)
+        public static Square GetSquareByName(string name)
         {
             return ChessBoard.SingleOrDefault(square => square.Name == name);
         }
-        public Square GetSquareByRankAndFile(int rank, int file)
+        public static Square GetSquareByRankAndFile(int rank, int file)
         {
-            return ChessBoard[(rank-1)*8 + file];
+            return ChessBoard[rank*8 + file];
         }
     }
 }

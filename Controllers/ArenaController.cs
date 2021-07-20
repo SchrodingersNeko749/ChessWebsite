@@ -23,7 +23,6 @@ namespace ChessWebsite.Controllers
         public IEnumerable<Move> GetMove(string currentsquare)
         {
             return Arena_GameManager.LegalMovesForPiece(currentsquare);
-            //return Arena_GameManager.RandomMove();
         }    
         public void SendMove(string currentsquare, string targetsquare)
         {

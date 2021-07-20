@@ -6,14 +6,12 @@ namespace ChessWebsite.Services
 {
     public class GameManager
     {
-        public static Board board_context;
         public static Move LastMove = new Move("","");
         public static bool isWhiteTurn = true;
         public static int MoveCount = 1;
-        public ChessLogic chessLogic;
+        public ChessLogic chessLogic;//entity that calculates legal moves 
         public GameManager()
         {
-            board_context = new Board("whitename", "blackname");
             chessLogic = new ChessLogic();
         }
         public Move RandomMove()
@@ -33,24 +31,27 @@ namespace ChessWebsite.Services
             }
             return LegalListSubset;
         }
-        public void RelocatePiece(Square current, Square target)
-        {
-            target.OccupingPiece = current.OccupingPiece;
-        }
+
         public void PlayMove(string currentsquarename, string targetsquarename)
         {
-            Console.Write(board_context.ChessBoard[0]);
+
             LastMove = ChessLogic.GetMoveBySquareNames(currentsquarename, targetsquarename);
 
-            var CurrentSquare = board_context.GetSquareByName(currentsquarename);
-            var TargetSquare = board_context.GetSquareByName(targetsquarename);
-
-            board_context.GetSquareByName(targetsquarename).OccupingPiece = board_context.GetSquareByName(currentsquarename).OccupingPiece;
-            board_context.GetSquareByName(currentsquarename).OccupingPiece = "";
-            isWhiteTurn = !isWhiteTurn;
-            MoveCount ++;
-                
+            var CurrentSquare = Board.GetSquareByName(currentsquarename);
+            var TargetSquare = Board.GetSquareByName(targetsquarename);
+            switch (LastMove.SpecialMove)
+            {
+                case "promotion":
+                    TargetSquare.OccupingPiece = "wQ";
+                    CurrentSquare.OccupingPiece = "";
+                break;
+                default:
+                    TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
+                    CurrentSquare.OccupingPiece = "";
+                break;
             }
-
+            isWhiteTurn = !isWhiteTurn;
+            MoveCount ++;      
+        }
     }
 }
