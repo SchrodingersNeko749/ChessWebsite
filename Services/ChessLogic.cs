@@ -44,10 +44,11 @@ namespace ChessWebsite.DTOs
                     LegalMoves.Add(new Move(pawn.Name, pawn1square.Name));
 
                 if(pawn.Rank == 1)
-                 {
+                {
                     pawn2square = Board.GetSquareByRankAndFile(pawn.Rank+2, pawn.File);     
-                    LegalMoves.Add(new Move(pawn.Name, pawn2square.Name));
-                 }
+                     if(pawn2square.OccupingPiece == "")
+                        LegalMoves.Add(new Move(pawn.Name, pawn2square.Name));
+                }
                  //pawn captures
                  if(pawn.File>0)
                  {
@@ -86,7 +87,8 @@ namespace ChessWebsite.DTOs
                 if(pawn.Rank == 6)
                  {
                     pawn2square = Board.GetSquareByRankAndFile(pawn.Rank-2, pawn.File);     
-                    LegalMoves.Add(new Move(pawn.Name, pawn2square.Name));
+                    if(pawn2square.OccupingPiece == "")
+                        LegalMoves.Add(new Move(pawn.Name, pawn2square.Name));
                  }
                  //pawn captures
                  if(pawn.File>0)

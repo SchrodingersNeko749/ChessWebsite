@@ -60,7 +60,6 @@ function DragStart(ev) {
   console.log(LegalSquares.indexOf(TargetedSquare.Name))
   if(TargetedSquare != SelectedSquare && LegalSquares.indexOf(TargetedSquare.Name) != -1) //if destination square of the move exists in LegalSquares
   {
-    console.log(SelectedSquare.Name,TargetedSquare.Name)
     TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
     PickedPiece.style.backgroundImage = "none"
     PickedPiece.style.top = Board[63].PieceElement.offsetTop + 128
