@@ -5,8 +5,10 @@ function GetMoveFromAPI(currentSquare)
   .then(res => res.json())
   .then(data => {
     LegalSquares.splice(0, LegalSquares.length)
+    LegalMoves.splice(0, LegalMoves.length)
     data.forEach(move => {
       LegalSquares.push(move.targetSquareName)
+      LegalMoves.push(move)
     });
     ColorLegalSquares()
   })

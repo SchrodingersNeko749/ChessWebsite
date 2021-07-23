@@ -168,6 +168,18 @@ function ColorLegalSquares()
           ColorSquare(square, "rgba(255, 0, 77, 0.23)")
       });
 }
+function GetLegalMovebySquare(tragetsquarename)
+{
+    let foundmove;
+    LegalMoves.forEach(move => {
+    if(move.targetSquareName == tragetsquarename)
+        foundmove = move
+    })
+    if(foundmove != undefined)
+        return foundmove;
+    else
+        console.log("ChessBoard.js.GetLegalMovebySquare : targetsquare not found")
+    }
 class Square
 {
     constructor(name, piece = "none", element)

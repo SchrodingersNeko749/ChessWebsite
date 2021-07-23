@@ -2,6 +2,7 @@ isWhiteMove = true
 let SelectedSquare = ""
 let TargetedSquare = ""
 let LegalSquares = []
+let LegalMoves = []
 //------------------------------------------------------------------------
 function Drag(ev)//on drag over
 {
@@ -58,10 +59,17 @@ function DragStart(ev) {
 
   index = y*8 + x
   TargetedSquare = Board[index]
-
-  if(TargetedSquare != SelectedSquare && LegalSquares.indexOf(TargetedSquare.Name) != -1) //if destination square of the move exists in LegalSquares
+  LastMove = GetLegalMovebySquare(TargetedSquare.Name)
+  if(TargetedSquare != SelectedSquare && LastMove != undefined) //if destination square of the move exists in LegalSquares
   {
-    TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+    if(LastMove.specialMove == "promotion")
+    {
+      Promotion(TargetedSquare, "wQ")
+    }
+    else
+    {
+      TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+    }
     PickedPiece.style.backgroundImage = "none"
     PickedPiece.style.top = Board[63].PieceElement.offsetTop + 128
     SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name)
@@ -102,7 +110,9 @@ function PlayMove(current_squarename, target_squarename)
  function Promotion(targetsquare, promotingpiece)
  {
    if(promotingpiece == "wQ")
-      targetsquare.PieceElement.backgroundImage = "url(/Pieces/WhiteQueen.png)"
+      targetsquare.PieceElement.style.backgroundImage = "url(/Pieces/WhiteQueen.png)"
    if(promotingpiece == "bQ")
-      targetsquare.PieceElement.backgroundImage = "url(/Pieces/BlackQueen.png)"
+      targetsquare.PieceElement.style.backgroundImage = "url(/Pieces/BlackQueen.png)"
+    
+    
  } 
