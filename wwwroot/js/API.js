@@ -4,7 +4,7 @@ function GetMoveFromAPI(currentSquare)
   fetch(url)
   .then(res => res.json())
   .then(data => {
-    console.log(data)
+    LegalSquares.splice(0, LegalSquares.length)
     data.forEach(move => {
       LegalSquares.push(move.targetSquareName)
     });

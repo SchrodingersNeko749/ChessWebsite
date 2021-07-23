@@ -15,6 +15,7 @@ function DragStart(ev) {
   y = Math.floor((ev.clientY - Board[0].PieceElement.offsetTop) / 128)
 
   index = y*8 + x
+  //only get moves from api if the selected square is currenntly empty (no square has been touched) or if the selected square has changed (touching different pieces)
   if(SelectedSquare == "" || SelectedSquare != Board[index])
   {
     LegalSquares.splice(0, LegalSquares.length)
@@ -57,7 +58,7 @@ function DragStart(ev) {
 
   index = y*8 + x
   TargetedSquare = Board[index]
-  console.log(LegalSquares.indexOf(TargetedSquare.Name))
+
   if(TargetedSquare != SelectedSquare && LegalSquares.indexOf(TargetedSquare.Name) != -1) //if destination square of the move exists in LegalSquares
   {
     TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage

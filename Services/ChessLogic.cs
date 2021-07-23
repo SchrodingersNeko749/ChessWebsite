@@ -38,7 +38,7 @@ namespace ChessWebsite.DTOs
                  //pawn forward move
                  pawn1square = Board.GetSquareByRankAndFile(pawn.Rank+1, pawn.File);
                  if(pawn1square.OccupingPiece == "")
-                 if(pawn.Rank == 7)//if its promotion
+                 if(pawn.Rank == 6)//if its promotion
                     LegalMoves.Add(new Move(pawn.Name, pawn1square.Name, "promotion"));
                 else
                     LegalMoves.Add(new Move(pawn.Name, pawn1square.Name));
@@ -55,7 +55,7 @@ namespace ChessWebsite.DTOs
                     pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank+1, pawn.File-1);
                     if(pawncaptureleft.OccupingPiece != "" && pawncaptureleft.OccupingPiece[0] == 'b')
                     {
-                        if(pawn.Rank == 7)//if its promotion
+                        if(pawn.Rank == 6)//if its promotion
                              LegalMoves.Add(new Move(pawn.Name, pawncaptureleft.Name, "promotion"));
                          else
                              LegalMoves.Add(new Move(pawn.Name, pawncaptureleft.Name));
@@ -66,7 +66,7 @@ namespace ChessWebsite.DTOs
                     pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank+1, pawn.File+1);
                     if(pawncaptureright.OccupingPiece != "" && pawncaptureright.OccupingPiece[0] == 'b')
                     {
-                        if(pawn.Rank == 7)//if its promotion
+                        if(pawn.Rank == 6)//if its promotion
                              LegalMoves.Add(new Move(pawn.Name, pawncaptureright.Name, "promotion"));
                          else
                              LegalMoves.Add(new Move(pawn.Name, pawncaptureright.Name));
@@ -96,7 +96,7 @@ namespace ChessWebsite.DTOs
                     pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank-1, pawn.File-1);
                     if(pawncaptureleft.OccupingPiece != "" && pawncaptureleft.OccupingPiece[0] == 'w')
                      {
-                        if(pawn.Rank == 2)//if its promotion
+                        if(pawn.Rank == 1)//if its promotion
                              LegalMoves.Add(new Move(pawn.Name, pawncaptureleft.Name, "promotion"));
                          else
                              LegalMoves.Add(new Move(pawn.Name, pawncaptureleft.Name));
@@ -107,7 +107,7 @@ namespace ChessWebsite.DTOs
                     pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank-1, pawn.File+1);
                     if(pawncaptureright.OccupingPiece != "" && pawncaptureright.OccupingPiece[0] == 'w')
                       {
-                        if(pawn.Rank == 2)//if its promotion
+                        if(pawn.Rank == 1)//if its promotion
                              LegalMoves.Add(new Move(pawn.Name, pawncaptureright.Name, "promotion"));
                          else
                              LegalMoves.Add(new Move(pawn.Name, pawncaptureright.Name));
@@ -137,7 +137,7 @@ namespace ChessWebsite.DTOs
                              {
                                  if(targetsquare.OccupingPiece [0] != queen.OccupingPiece[0])
                                      LegalMoves.Add(new Move(queen.Name, targetsquare.Name));
-                                    break;
+                                break;
                              }
                              else
                                  LegalMoves.Add(new Move(queen.Name, targetsquare.Name));

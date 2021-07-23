@@ -42,7 +42,7 @@ namespace ChessWebsite.Services
             switch (LastMove.SpecialMove)
             {
                 case "promotion":
-                    TargetSquare.OccupingPiece = "wQ";
+                    TargetSquare.OccupingPiece = $"{CurrentSquare.OccupingPiece[0]}Q";
                     CurrentSquare.OccupingPiece = "";
                 break;
                 default:
