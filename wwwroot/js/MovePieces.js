@@ -3,6 +3,7 @@ let SelectedSquare = ""
 let TargetedSquare = ""
 let LegalSquares = []
 let LegalMoves = []
+let promotingpiece = ""
 //------------------------------------------------------------------------
 function Drag(ev)//on drag over
 {
@@ -28,7 +29,7 @@ function DragStart(ev) {
   PickedPiece.style.left = ev.clientX - 64
 
   //if its white's move
-  if (isWhiteMove && ev.target.style.backgroundImage[13] == 'W') {
+  if (isWhiteMove && ev.target.style.backgroundImage[13] == 'w') {
       PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
       ev.target.style.backgroundImage = "none"
 
@@ -37,7 +38,7 @@ function DragStart(ev) {
   }
   else{
     //if its blacks move
-    if(!isWhiteMove && ev.target.style.backgroundImage[13] == 'B'){
+    if(!isWhiteMove && ev.target.style.backgroundImage[13] == 'b'){
       PickedPiece.style.backgroundImage = ev.target.style.backgroundImage
       ev.target.style.backgroundImage = "none"
 
@@ -62,17 +63,19 @@ function DragStart(ev) {
   LastMove = GetLegalMovebySquare(TargetedSquare.Name)
   if(TargetedSquare != SelectedSquare && LastMove != undefined) //if destination square of the move exists in LegalSquares
   {
+    var promotingpiece = "wN"
     if(LastMove.specialMove == "promotion")
     {
-      Promotion(TargetedSquare, "wQ")
+      TargetedSquare.PieceElement.style.backgroundImage = "none"
+      PromotionModal.style.display = "block"
     }
     else
     {
       TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+      SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, promotingpiece)
     }
     PickedPiece.style.backgroundImage = "none"
     PickedPiece.style.top = Board[63].PieceElement.offsetTop + 128
-    SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name)
     isWhiteMove = !isWhiteMove
   }
   else{ // is not a legal move
@@ -89,14 +92,15 @@ function PlayMove(current_squarename, target_squarename)
   currentSquare = GetSquare(current_squarename)
   targetSquare = GetSquare(target_squarename)
   //if its white's move
-  if (isWhiteMove && currentSquare.PieceElement.style.backgroundImage[13] == 'W') {
+  //"url()"
+  if (isWhiteMove && currentSquare.PieceElement.style.backgroundImage[13] == 'w') {
     targetSquare.PieceElement.style.backgroundImage = currentSquare.PieceElement.style.backgroundImage
     currentSquare.PieceElement.style.backgroundImage = "none"
     SendMoveToAPI(current_squarename, target_squarename)
   }
   else{
     //if its black's move
-    if(!isWhiteMove && currentSquare.PieceElement.style.backgroundImage[13] == 'B'){
+    if(!isWhiteMove && currentSquare.PieceElement.style.backgroundImage[13] == 'b'){
     targetSquare.PieceElement.style.backgroundImage = currentSquare.PieceElement.style.backgroundImage
     currentSquare.PieceElement.style.backgroundImage = "none"
     SendMoveToAPI(current_squarename, target_squarename)
@@ -107,12 +111,3 @@ function PlayMove(current_squarename, target_squarename)
   isWhiteMove = !isWhiteMove
 }
  //------------------------------------------------------------------------
- function Promotion(targetsquare, promotingpiece)
- {
-   if(promotingpiece == "wQ")
-      targetsquare.PieceElement.style.backgroundImage = "url(/Pieces/WhiteQueen.png)"
-   if(promotingpiece == "bQ")
-      targetsquare.PieceElement.style.backgroundImage = "url(/Pieces/BlackQueen.png)"
-    
-    
- } 

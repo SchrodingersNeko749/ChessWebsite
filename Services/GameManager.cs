@@ -32,7 +32,7 @@ namespace ChessWebsite.Services
             return LegalListSubset;
         }
 
-        public void PlayMove(string currentsquarename, string targetsquarename)
+        public void PlayMove(string currentsquarename, string targetsquarename, string promotingpiece)
         {
 
             LastMove = ChessLogic.GetMoveBySquareNames(currentsquarename, targetsquarename);
@@ -42,7 +42,7 @@ namespace ChessWebsite.Services
             switch (LastMove.SpecialMove)
             {
                 case "promotion":
-                    TargetSquare.OccupingPiece = $"{CurrentSquare.OccupingPiece[0]}Q";
+                    TargetSquare.OccupingPiece = $"{CurrentSquare.OccupingPiece[0]}{promotingpiece[1]}";
                     CurrentSquare.OccupingPiece = "";
                 break;
                 default:

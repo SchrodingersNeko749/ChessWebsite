@@ -1,10 +1,12 @@
 let Board = []
+var PromotionModal;
 var PickedPiece
 
 function SetupBoard()
 {
-    //initiating the picked piece
+    //initiating the picked piece and modal
     PickedPiece = document.getElementById("picked-piece");
+    PromotionModal = document.getElementById("PromotionModal");
     //if square elements exists setup pieces 
     if (document.getElementsByClassName("grid-item").length == 64) {
         SetupPieces()
@@ -50,95 +52,96 @@ function SetupPieces() {
         Board[i].PieceElement.style.backgroundImage = "none"
     }
     //two black rooks
+    //bR
     Board[0].Piece = "bR"
-    Board[0].PieceElement.style.backgroundImage = "url(/Pieces/BlackRook.png)";
+    Board[0].PieceElement.style.backgroundImage = "url(/Pieces/bR.png)";
     Board[7].Piece = "bR"
-    Board[7].PieceElement.style.backgroundImage = "url(/Pieces/BlackRook.png)";
+    Board[7].PieceElement.style.backgroundImage = "url(/Pieces/bR.png)";
     //two black knights
     Board[1].Piece = "bN"
-    Board[1].PieceElement.style.backgroundImage = "url(/Pieces/BlackKnight.png)";
+    Board[1].PieceElement.style.backgroundImage = "url(/Pieces/bN.png)";
     Board[6].Piece = "bN"
-    Board[6].PieceElement.style.backgroundImage = "url(/Pieces/BlackKnight.png)";
+    Board[6].PieceElement.style.backgroundImage = "url(/Pieces/bN.png)";
     //two black bishops
     Board[2].Piece = "bB"
-    Board[2].PieceElement.style.backgroundImage = "url(/Pieces/BlackBishop.png)";
+    Board[2].PieceElement.style.backgroundImage = "url(/Pieces/bB.png)";
     Board[5].Piece = "bB"
-    Board[5].PieceElement.style.backgroundImage = "url(/Pieces/BlackBishop.png)";
+    Board[5].PieceElement.style.backgroundImage = "url(/Pieces/bB.png)";
     //black queen and king
     Board[3].Piece = "bQ"
-    Board[3].PieceElement.style.backgroundImage = "url(/Pieces/BlackQueen.png)";
+    Board[3].PieceElement.style.backgroundImage = "url(/Pieces/bQ.png)";
     Board[4].Piece = "bK"
-    Board[4].PieceElement.style.backgroundImage = "url(/Pieces/BlackKing.png)";
+    Board[4].PieceElement.style.backgroundImage = "url(/Pieces/bK.png)";
     //black pawns
     Board[8].Piece = "bP"
-    Board[8].PieceElement.style.backgroundImage = "url(/Pieces/BlackPawn.png)";
+    Board[8].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
 
     Board[9].Piece = "bP"
-    Board[9].PieceElement.style.backgroundImage = "url(/Pieces/BlackPawn.png)";
+    Board[9].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
 
     Board[10].Piece = "bP"
-    Board[10].PieceElement.style.backgroundImage = "url(/Pieces/BlackPawn.png)";
+    Board[10].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
 
     Board[11].Piece = "bP"
-    Board[11].PieceElement.style.backgroundImage = "url(/Pieces/BlackPawn.png)";
+    Board[11].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
 
     Board[12].Piece = "bP"
-    Board[12].PieceElement.style.backgroundImage = "url(/Pieces/BlackPawn.png)";
+    Board[12].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
 
     Board[13].Piece = "bP"
-    Board[13].PieceElement.style.backgroundImage = "url(/Pieces/BlackPawn.png)";
+    Board[13].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
 
     Board[14].Piece = "bP"
-    Board[14].PieceElement.style.backgroundImage = "url(/Pieces/BlackPawn.png)";
+    Board[14].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
 
     Board[15].Piece = "bP"
-    Board[15].PieceElement.style.backgroundImage = "url(/Pieces/BlackPawn.png)";
+    Board[15].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
     
     //two white rooks
     Board[63].Piece = "wR"
-    Board[63].PieceElement.style.backgroundImage = "url(/Pieces/WhiteRook.png)";
+    Board[63].PieceElement.style.backgroundImage = "url(/Pieces/wR.png)";
     Board[63-7].Piece = "wR"
-    Board[63-7].PieceElement.style.backgroundImage = "url(/Pieces/WhiteRook.png)";
+    Board[63-7].PieceElement.style.backgroundImage = "url(/Pieces/wR.png)";
     //two white knights
     Board[63-1].Piece = "wN"
-    Board[63-1].PieceElement.style.backgroundImage = "url(/Pieces/WhiteKnight.png)";
+    Board[63-1].PieceElement.style.backgroundImage = "url(/Pieces/wN.png)";
     Board[63-6].Piece = "wN"
-    Board[63-6].PieceElement.style.backgroundImage = "url(/Pieces/WhiteKnight.png)";
+    Board[63-6].PieceElement.style.backgroundImage = "url(/Pieces/wN.png)";
     //two white bishops
     Board[63-2].Piece = "wB"
-    Board[63-2].PieceElement.style.backgroundImage = "url(/Pieces/WhiteBishop.png)";
+    Board[63-2].PieceElement.style.backgroundImage = "url(/Pieces/wB.png)";
     Board[63-5].Piece = "wB"
-    Board[63-5].PieceElement.style.backgroundImage = "url(/Pieces/WhiteBishop.png)";
+    Board[63-5].PieceElement.style.backgroundImage = "url(/Pieces/wB.png)";
     //white queen and king
     Board[63-4].Piece = "wQ"
-    Board[63-4].PieceElement.style.backgroundImage = "url(/Pieces/WhiteQueen.png)";
+    Board[63-4].PieceElement.style.backgroundImage = "url(/Pieces/wQ.png)";
 
     Board[63-3].Piece = "wK"
-    Board[63-3].PieceElement.style.backgroundImage = "url(/Pieces/WhiteKing.png)";
+    Board[63-3].PieceElement.style.backgroundImage = "url(/Pieces/wK.png)";
     //white pawns
     Board[63-8].Piece = "wP"
-    Board[63-8].PieceElement.style.backgroundImage = "url(/Pieces/WhitePawn.png)";
+    Board[63-8].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
 
     Board[63-9].Piece = "wP"
-    Board[63-9].PieceElement.style.backgroundImage = "url(/Pieces/WhitePawn.png)";
+    Board[63-9].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
 
     Board[63-10].Piece = "wP"
-    Board[63-10].PieceElement.style.backgroundImage = "url(/Pieces/WhitePawn.png)";
+    Board[63-10].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
 
     Board[63-11].Piece = "wP"
-    Board[63-11].PieceElement.style.backgroundImage = "url(/Pieces/WhitePawn.png)";
+    Board[63-11].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
 
     Board[63-12].Piece = "wP"
-    Board[63-12].PieceElement.style.backgroundImage = "url(/Pieces/WhitePawn.png)";
+    Board[63-12].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
 
     Board[63-13].Piece = "wP"
-    Board[63-13].PieceElement.style.backgroundImage = "url(/Pieces/WhitePawn.png)";
+    Board[63-13].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
 
     Board[63-14].Piece = "wP"
-    Board[63-14].PieceElement.style.backgroundImage = "url(/Pieces/WhitePawn.png)";
+    Board[63-14].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
 
     Board[63-15].Piece = "wP"
-    Board[63-15].PieceElement.style.backgroundImage = "url(/Pieces/WhitePawn.png)";
+    Board[63-15].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
 }
 function GetSquare(squarename)
 {
@@ -180,6 +183,15 @@ function GetLegalMovebySquare(tragetsquarename)
     else
         console.log("ChessBoard.js.GetLegalMovebySquare : targetsquare not found")
     }
+function ModaiSelectPiece(modaiselectedpiece)
+{
+    url = 'url("'+ modaiselectedpiece.currentSrc.slice(22) + '")'
+    if(isWhiteMove)
+        url = url.replace(/w/, 'b')
+    PromotionModal.style.display = "none"
+    TargetedSquare.PieceElement.style.backgroundImage = url
+    SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, ""+url[13]+url[14])
+}
 class Square
 {
     constructor(name, piece = "none", element)

@@ -13,11 +13,12 @@ function GetMoveFromAPI(currentSquare)
     ColorLegalSquares()
   })
 }
-function SendMoveToAPI(currentSquare, targetSquare)
+function SendMoveToAPI(currentSquare, targetSquare, specialMove)
 {
   let move = new FormData()
   move.append("currentsquare",currentSquare)
   move.append("targetsquare",targetSquare)
+  move.append("promotingpiece", specialMove)
   fetch("https://localhost:5001/Arena/SendMove/",{
       method: 'POST',
       body: move
