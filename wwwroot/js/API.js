@@ -4,13 +4,12 @@ function GetMoveFromAPI(currentSquare)
   fetch(url)
   .then(res => res.json())
   .then(data => {
-    LegalSquares.splice(0, LegalSquares.length)
     LegalMoves.splice(0, LegalMoves.length)
     data.forEach(move => {
-      LegalSquares.push(move.targetSquare.name)
       LegalMoves.push(move)
+      ColorSquare(move.targetSquare.name, "rgba(232, 199, 109,0.4)")
     });
-    ColorLegalSquares()
+    //ColorLegalSquares()
   })
 }
 function SendMoveToAPI(currentSquare, targetSquare, specialMove)

@@ -165,12 +165,6 @@ function deColorBoard()
         Board[i].PieceElement.style.borderColor = "transparent"
     }
 }
-function ColorLegalSquares()
-{
-    LegalSquares.forEach(square => {
-          ColorSquare(square, "rgba(255, 0, 77, 0.23)")
-      });
-}
 function GetLegalMovebySquare(tragetsquarename)
 {
     let foundmove;

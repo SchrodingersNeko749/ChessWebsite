@@ -74,9 +74,21 @@ namespace ChessWebsite.DTOs
                     }
                  }
                  //en passant
-                 if(pawn.Rank == 5)
+                 if(pawn.Rank == 4 && LastMove.TargetSquare.OccupingPiece[1] == 'P' && LastMove.CurrentSquare.Rank == 6 && LastMove.TargetSquare.Rank ==4)
                  {
-
+                     if(LastMove.TargetSquare.File == pawn.File +1)
+                     {
+                         pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank +1 , pawn.File +1);
+                        LegalMoves.Add(new Move(pawn,pawncaptureright, "en passant"));
+                     }
+                     else
+                     {
+                         if(LastMove.TargetSquare.File == pawn.File -1)
+                         {
+                            pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank +1 , pawn.File -1);
+                            LegalMoves.Add(new Move(pawn,pawncaptureleft, "en passant"));
+                         }
+                     }
                  }
              }
              else // pawns go down

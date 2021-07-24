@@ -36,13 +36,19 @@ namespace ChessWebsite.Services
 
             ChessLogic.LastMove = ChessLogic.GetMoveBySquareNames(currentsquarename, targetsquarename);
 
-            var CurrentSquare = Board.GetSquareByName(currentsquarename);
-            var TargetSquare = Board.GetSquareByName(targetsquarename);
+            var CurrentSquare = ChessLogic.LastMove.CurrentSquare;
+            var TargetSquare = ChessLogic.LastMove.TargetSquare;
             switch (ChessLogic.LastMove.SpecialMove)
             {
                 case "promotion":
                     TargetSquare.OccupingPiece = $"{CurrentSquare.OccupingPiece[0]}{promotingpiece[1]}";
                     CurrentSquare.OccupingPiece = "";
+                break;
+                case "en passant":
+                    var enpassant = Board.GetSquareByRankAndFile(TargetSquare.Rank-1, TargetSquare.File);
+                    TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
+                    CurrentSquare.OccupingPiece = "";
+                    enpassant.OccupingPiece = "";
                 break;
                 default:
                     TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;

@@ -24,7 +24,7 @@ function DragStart(ev) {
     SelectedSquare = Board[index]
     GetMoveFromAPI(SelectedSquare.Name)
   }
-  ColorLegalSquares()
+  //ColorLegalSquares()
   PickedPiece.style.top = ev.clientY - 64
   PickedPiece.style.left = ev.clientX - 64
 
@@ -63,16 +63,20 @@ function DragStart(ev) {
   LastMove = GetLegalMovebySquare(TargetedSquare.Name)
   if(TargetedSquare != SelectedSquare && LastMove != undefined) //if destination square of the move exists in LegalSquares
   {
-    var promotingpiece = "wN"
-    if(LastMove.specialMove == "promotion")
-    {
-      TargetedSquare.PieceElement.style.backgroundImage = "none"
-      PromotionModal.style.display = "block"
-    }
-    else
-    {
-      TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
-      SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, promotingpiece)
+    switch (LastMove.specialMove) {
+      case "promotion":
+        TargetedSquare.PieceElement.style.backgroundImage = "none"
+        PromotionModal.style.display = "block"
+        break;
+      case "en passant":
+        console.log("en passant")
+        TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+        Board[index+8].PieceElement.style.backgroundImage = "none"
+        break;
+      default:
+        TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+        SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, promotingpiece)
+        break;
     }
     PickedPiece.style.backgroundImage = "none"
     PickedPiece.style.top = Board[63].PieceElement.offsetTop + 128
