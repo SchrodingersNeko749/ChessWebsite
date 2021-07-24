@@ -1,6 +1,4 @@
 using System.Linq;
-using ChessWebsite.DTOs;
-using ChessWebsite.Services;
 using System.Collections.Generic;
 namespace ChessWebsite.DTOs
 {
@@ -28,7 +26,8 @@ namespace ChessWebsite.DTOs
                     case 'B':
                         CalculateBishopMoves(piece);
                     break;
-                    default:
+                    case 'R':
+                        CalculateRookMoves(piece);
                     break;
                 }        
             }
@@ -137,15 +136,48 @@ namespace ChessWebsite.DTOs
                     }
                  }
                 //en passant 
-                 if(pawn.Rank == 4 )
+                if(pawn.Rank == 3 && LastMove.TargetSquare.OccupingPiece[1] == 'P' && LastMove.CurrentSquare.Rank == 1 && LastMove.TargetSquare.Rank ==3)
                  {
-                     
+                     if(LastMove.TargetSquare.File == pawn.File +1)
+                     {
+                        pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank -1 , pawn.File +1);
+                        LegalMoves.Add(new Move(pawn,pawncaptureright, "en passant"));
+                     }
+                     else
+                     {
+                         if(LastMove.TargetSquare.File == pawn.File -1)
+                         {
+                            pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank -1 , pawn.File -1);
+                            LegalMoves.Add(new Move(pawn,pawncaptureleft, "en passant"));
+                         }
+                     }
                  }
              }
          }
         private void CalculateRookMoves(Square rook)
         {
+            Square targetsquare;
+            for(int f = -1; f <= 1; f++)
+                for(int r = -1; r <= 1; r++)
+                    for(int length = 1; length<9 ; length++)
+                    if(r!=f && (r +f) != 0)
+                    {
+                        var targetrank = rook.Rank + r*length;
+                        var targetfile = rook.File + f*length;
+                        if(targetrank >= 0 && targetrank <8 &&  targetfile>=0 && targetfile<8)
+                        {
+                            targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                            if (targetsquare.OccupingPiece!= "")
+                             {
+                                 if(targetsquare.OccupingPiece [0] != rook.OccupingPiece[0])
+                                     LegalMoves.Add(new Move(rook, targetsquare));
+                                break;
+                             }
+                             else
+                                 LegalMoves.Add(new Move(rook, targetsquare));
+                        }
 
+                    }
         }
         private void CalculateQueenMoves(Square queen)
         {

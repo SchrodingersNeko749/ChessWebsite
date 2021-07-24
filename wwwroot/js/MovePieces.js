@@ -69,9 +69,11 @@ function DragStart(ev) {
         PromotionModal.style.display = "block"
         break;
       case "en passant":
-        console.log("en passant")
         TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
-        Board[index+8].PieceElement.style.backgroundImage = "none"
+        if(isWhiteMove)
+          Board[index+8].PieceElement.style.backgroundImage = "none"
+        else
+          Board[index-8].PieceElement.style.backgroundImage = "none"
         break;
       default:
         TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage

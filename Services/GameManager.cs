@@ -45,7 +45,11 @@ namespace ChessWebsite.Services
                     CurrentSquare.OccupingPiece = "";
                 break;
                 case "en passant":
-                    var enpassant = Board.GetSquareByRankAndFile(TargetSquare.Rank-1, TargetSquare.File);
+                    Square enpassant ;
+                    if(isWhiteTurn)
+                        enpassant = Board.GetSquareByRankAndFile(TargetSquare.Rank-1, TargetSquare.File);
+                    else
+                        enpassant = Board.GetSquareByRankAndFile(TargetSquare.Rank+1, TargetSquare.File);
                     TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
                     CurrentSquare.OccupingPiece = "";
                     enpassant.OccupingPiece = "";
