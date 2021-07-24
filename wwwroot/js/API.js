@@ -7,7 +7,7 @@ function GetMoveFromAPI(currentSquare)
     LegalSquares.splice(0, LegalSquares.length)
     LegalMoves.splice(0, LegalMoves.length)
     data.forEach(move => {
-      LegalSquares.push(move.targetSquareName)
+      LegalSquares.push(move.targetSquare.name)
       LegalMoves.push(move)
     });
     ColorLegalSquares()
@@ -18,7 +18,7 @@ function SendMoveToAPI(currentSquare, targetSquare, specialMove)
   let move = new FormData()
   move.append("currentsquare",currentSquare)
   move.append("targetsquare",targetSquare)
-  move.append("promotingpiece", specialMove)
+  move.append("specialmove", specialMove)
   fetch("https://localhost:5001/Arena/SendMove/",{
       method: 'POST',
       body: move

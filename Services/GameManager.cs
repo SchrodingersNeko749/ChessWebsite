@@ -6,7 +6,6 @@ namespace ChessWebsite.Services
 {
     public class GameManager
     {
-        public static Move LastMove = new Move("","");
         public static bool isWhiteTurn = true;
         public static int MoveCount = 1;
         public ChessLogic chessLogic;//entity that calculates legal moves 
@@ -26,7 +25,7 @@ namespace ChessWebsite.Services
             chessLogic.CalculateLegalMoves();
             foreach (var mv in ChessLogic.LegalMoves)
             {
-                if(mv.CurrentSquareName == currentsquarename)
+                if(mv.CurrentSquare.Name == currentsquarename)
                     LegalListSubset.Add(mv);
             }
             return LegalListSubset;
@@ -35,11 +34,11 @@ namespace ChessWebsite.Services
         public void PlayMove(string currentsquarename, string targetsquarename, string promotingpiece)
         {
 
-            LastMove = ChessLogic.GetMoveBySquareNames(currentsquarename, targetsquarename);
+            ChessLogic.LastMove = ChessLogic.GetMoveBySquareNames(currentsquarename, targetsquarename);
 
             var CurrentSquare = Board.GetSquareByName(currentsquarename);
             var TargetSquare = Board.GetSquareByName(targetsquarename);
-            switch (LastMove.SpecialMove)
+            switch (ChessLogic.LastMove.SpecialMove)
             {
                 case "promotion":
                     TargetSquare.OccupingPiece = $"{CurrentSquare.OccupingPiece[0]}{promotingpiece[1]}";

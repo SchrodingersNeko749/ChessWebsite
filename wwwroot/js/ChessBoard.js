@@ -175,7 +175,7 @@ function GetLegalMovebySquare(tragetsquarename)
 {
     let foundmove;
     LegalMoves.forEach(move => {
-    if(move.targetSquareName == tragetsquarename)
+    if(move.targetSquare.name == tragetsquarename)
         foundmove = move
     })
     if(foundmove != undefined)

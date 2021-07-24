@@ -3,19 +3,19 @@ using System;
  {
      public class Move
      {
-         public Move(string currentsquare, string targetsquare)
+         public Move(Square currentsquare, Square targetsquare)
          {
-             CurrentSquareName = currentsquare;
-             TargetSquareName = targetsquare;
+             CurrentSquare = currentsquare;
+             TargetSquare = targetsquare;
          }
-         public Move(string currentsquare, string targetsquare, string specialmove)
+         public Move(Square currentsquare, Square targetsquare, string specialmove)
          {
-             CurrentSquareName = currentsquare;
-             TargetSquareName = targetsquare;
+             CurrentSquare = currentsquare;
+             TargetSquare = targetsquare;
              SpecialMove = specialmove;
          }
-         public string CurrentSquareName { get; set; }// this needs to become type Move
-         public string TargetSquareName { get; set; }// this needs to become type Move
+         public Square CurrentSquare { get; set; }// this needs to become type Move
+         public Square TargetSquare { get; set; }// this needs to become type Move
          public string SpecialMove {get; set;}
      }
  }
