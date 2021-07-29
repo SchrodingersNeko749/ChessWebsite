@@ -191,7 +191,18 @@ namespace ChessWebsite.DTOs
                             if (targetsquare.OccupingPiece!= "")
                              {
                                  if(targetsquare.OccupingPiece [0] != rook.OccupingPiece[0])
-                                     AddMove(new Move(rook, targetsquare));
+                                 {
+                                     if(targetsquare.OccupingPiece[1] == 'K')
+                                    {
+                                        targetrank = rook.Rank + r*(length+1);
+                                        targetfile = rook.File + f*(length+1);
+                                        if(targetrank >= 0 && targetrank <8 &&  targetfile>=0 && targetfile<8)
+                                        {
+                                            Board.GetSquareByRankAndFile(targetrank,targetfile).AddToTargetedBy(rook.OccupingPiece[0]);
+                                        }
+                                    }
+                                    AddMove(new Move(rook, targetsquare));
+                                 }
                                 break;
                              }
                              else
@@ -216,7 +227,18 @@ namespace ChessWebsite.DTOs
                             if (targetsquare.OccupingPiece!= "")
                              {
                                  if(targetsquare.OccupingPiece [0] != queen.OccupingPiece[0])
+                                 {
+                                    if(targetsquare.OccupingPiece[1] == 'K')
+                                    {
+                                        targetrank = queen.Rank + r*(length+1);
+                                        targetfile = queen.File + f*(length+1);
+                                        if(targetrank >= 0 && targetrank <8 &&  targetfile>=0 && targetfile<8)
+                                        {
+                                            Board.GetSquareByRankAndFile(targetrank,targetfile).AddToTargetedBy(queen.OccupingPiece[0]);
+                                        }
+                                    }
                                      AddMove(new Move(queen, targetsquare));
+                                 }
                                 break;
                              }
                              else
@@ -241,7 +263,18 @@ namespace ChessWebsite.DTOs
                             if (targetsquare.OccupingPiece!= "")
                              {
                                  if(targetsquare.OccupingPiece [0] != bishop.OccupingPiece[0])
-                                     AddMove(new Move(bishop, targetsquare));
+                                 {
+                                    if(targetsquare.OccupingPiece[1] == 'K')
+                                    {
+                                        targetrank = bishop.Rank + r*(length+1);
+                                        targetfile = bishop.File + f*(length+1);
+                                        if(targetrank >= 0 && targetrank <8 &&  targetfile>=0 && targetfile<8)
+                                        {
+                                            Board.GetSquareByRankAndFile(targetrank,targetfile).AddToTargetedBy(bishop.OccupingPiece[0]);
+                                        }
+                                    }
+                                    AddMove(new Move(bishop, targetsquare));
+                                 }
                                 break;
                              }
                              else
