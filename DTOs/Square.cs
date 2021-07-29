@@ -9,12 +9,14 @@ namespace ChessWebsite.DTOs
             File = num % 8;
             SquareIndex = Rank*8 + File;
             Name = SquareName(num);
+            Targetedby = new char[2];
          }
         public string Name {get; set;}
         public string OccupingPiece = "";
         public int Rank {get; set;}
         public int File {get; set;}
         public int SquareIndex {get; set;}
+        public char[] Targetedby {get; set;}
         private string SquareName(int number)
          {
             char[] filenamemap = new char[8]; // bad name
@@ -30,7 +32,12 @@ namespace ChessWebsite.DTOs
             var name = new string($"{filenamemap[File]}{Rank+1}");
             return name;
          }
-
-         
+      public void AddToTargetedBy(char color)
+      {
+         if(color == 'w')
+                Targetedby[0] = 'w';
+            else
+                Targetedby[1] = 'b';
+      }
     }
 }

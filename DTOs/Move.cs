@@ -14,8 +14,8 @@ using System;
              TargetSquare = targetsquare;
              SpecialMove = specialmove;
          }
-         public Square CurrentSquare { get; set; }// this needs to become type Move
-         public Square TargetSquare { get; set; }// this needs to become type Move
+         public Square CurrentSquare { get; set; }
+         public Square TargetSquare { get; set; }
          public string SpecialMove {get; set;}
      }
  }
