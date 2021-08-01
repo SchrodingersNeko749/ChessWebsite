@@ -11,7 +11,6 @@ namespace ChessWebsite.DTOs
         private Player blackplayer;
         public static Move LastMove = new Move(Board.ChessBoard[0], Board.ChessBoard[0]);
         public static List<Move> LegalMoves = new List<Move>();
-        private List<Square> BlockCheckSquares = new List<Square>();
         public ChessLogic(Player white, Player black)
         {
             whiteplayer = white;
@@ -20,6 +19,7 @@ namespace ChessWebsite.DTOs
         public void CalculateLegalMoves()
         {
             currentPlayer = CurrentPlayer();
+            currentPlayer.CheckedByHowManyPiece = 0;
             LegalMoves.Clear();
             Square whiteking = new Square(65);//just to assign a value to variable
             Square blackking = new Square(65);//just to assign a value to variable
@@ -82,15 +82,17 @@ namespace ChessWebsite.DTOs
                  pawn1square = Board.GetSquareByRankAndFile(pawn.Rank+1, pawn.File);
                  if(pawn1square.OccupingPiece == "")
                  if(pawn.Rank == 6)//if its promotion
-                    LegalMoves.Add(new Move(pawn, pawn1square, "promotion"));
+                 {
+                    AddMove(new Move(pawn, pawn1square, "promotion"));
+                 }
                 else
-                    LegalMoves.Add(new Move(pawn, pawn1square));
+                    AddMove(new Move(pawn, pawn1square));
 
                 if(pawn.Rank == 1)
                 {
                     pawn2square = Board.GetSquareByRankAndFile(pawn.Rank+2, pawn.File);     
-                     if(pawn2square.OccupingPiece == "")
-                        LegalMoves.Add(new Move(pawn, pawn2square));
+                     if(pawn2square.OccupingPiece == "" && pawn1square.OccupingPiece =="")
+                        AddMove(new Move(pawn, pawn2square));
                 }
                  //pawn captures
                  if(pawn.File>0)
@@ -100,9 +102,9 @@ namespace ChessWebsite.DTOs
                     if(pawncaptureleft.OccupingPiece != "" && pawncaptureleft.OccupingPiece[0] == 'b')
                     {
                         if(pawn.Rank == 6)//if its promotion
-                             LegalMoves.Add(new Move(pawn, pawncaptureleft, "promotion"));
+                             AddMove(new Move(pawn, pawncaptureleft, "promotion"));
                          else
-                             LegalMoves.Add(new Move(pawn, pawncaptureleft));
+                             AddMove(new Move(pawn, pawncaptureleft));
                     }
                  }
                  if(pawn.File<7)
@@ -112,9 +114,9 @@ namespace ChessWebsite.DTOs
                     if(pawncaptureright.OccupingPiece != "" && pawncaptureright.OccupingPiece[0] == 'b')
                     {
                         if(pawn.Rank == 6)//if its promotion
-                             LegalMoves.Add(new Move(pawn, pawncaptureright, "promotion"));
+                             AddMove(new Move(pawn, pawncaptureright, "promotion"));
                          else
-                             LegalMoves.Add(new Move(pawn, pawncaptureright));
+                             AddMove(new Move(pawn, pawncaptureright));
                     }
                  }
                  //en passant
@@ -123,33 +125,36 @@ namespace ChessWebsite.DTOs
                      if(LastMove.TargetSquare.File == pawn.File +1)
                      {
                          pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank +1 , pawn.File +1);
-                        LegalMoves.Add(new Move(pawn,pawncaptureright, "en passant"));
+                        AddMove(new Move(pawn,pawncaptureright, "en passant"));
                      }
                      else
                      {
                          if(LastMove.TargetSquare.File == pawn.File -1)
                          {
                             pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank +1 , pawn.File -1);
-                            LegalMoves.Add(new Move(pawn,pawncaptureleft, "en passant"));
+                            AddMove(new Move(pawn,pawncaptureleft, "en passant"));
                          }
                      }
                  }
              }
              else // pawns go down
              {
-                 //pawn forward move
+                //pawn forward move
                  pawn1square = Board.GetSquareByRankAndFile(pawn.Rank-1, pawn.File);
                  if(pawn1square.OccupingPiece == "")
                  if(pawn.Rank == 1)//if its promotion
-                    LegalMoves.Add(new Move(pawn, pawn1square, "promotion"));
+                 {
+                    AddMove(new Move(pawn, pawn1square, "promotion"));
+                 }
                 else
-                    LegalMoves.Add(new Move(pawn, pawn1square));
+                    AddMove(new Move(pawn, pawn1square));
+
 
                 if(pawn.Rank == 6)
                  {
                     pawn2square = Board.GetSquareByRankAndFile(pawn.Rank-2, pawn.File);     
-                    if(pawn2square.OccupingPiece == "")
-                        LegalMoves.Add(new Move(pawn, pawn2square));
+                    if(pawn2square.OccupingPiece == "" && pawn1square.OccupingPiece =="")
+                        AddMove(new Move(pawn, pawn2square));
                  }
                  //pawn captures
                  if(pawn.File>0)
@@ -159,9 +164,9 @@ namespace ChessWebsite.DTOs
                     if(pawncaptureleft.OccupingPiece != "" && pawncaptureleft.OccupingPiece[0] == 'w')
                      {
                         if(pawn.Rank == 1)//if its promotion
-                             LegalMoves.Add(new Move(pawn, pawncaptureleft, "promotion"));
+                             AddMove(new Move(pawn, pawncaptureleft, "promotion"));
                          else
-                             LegalMoves.Add(new Move(pawn, pawncaptureleft));
+                             AddMove(new Move(pawn, pawncaptureleft));
                     }
                  }
                  if(pawn.File<7)
@@ -171,9 +176,9 @@ namespace ChessWebsite.DTOs
                     if(pawncaptureright.OccupingPiece != "" && pawncaptureright.OccupingPiece[0] == 'w')
                       {
                         if(pawn.Rank == 1)//if its promotion
-                             LegalMoves.Add(new Move(pawn, pawncaptureright, "promotion"));
+                             AddMove(new Move(pawn, pawncaptureright, "promotion"));
                          else
-                             LegalMoves.Add(new Move(pawn, pawncaptureright));
+                             AddMove(new Move(pawn, pawncaptureright));
                     }
                  }
                 //en passant 
@@ -182,14 +187,14 @@ namespace ChessWebsite.DTOs
                      if(LastMove.TargetSquare.File == pawn.File +1)
                      {
                         pawncaptureright = Board.GetSquareByRankAndFile(pawn.Rank -1 , pawn.File +1);
-                        LegalMoves.Add(new Move(pawn,pawncaptureright, "en passant"));
+                        AddMove(new Move(pawn,pawncaptureright, "en passant"));
                      }
                      else
                      {
                          if(LastMove.TargetSquare.File == pawn.File -1)
                          {
                             pawncaptureleft = Board.GetSquareByRankAndFile(pawn.Rank -1 , pawn.File -1);
-                            LegalMoves.Add(new Move(pawn,pawncaptureleft, "en passant"));
+                            AddMove(new Move(pawn,pawncaptureleft, "en passant"));
                          }
                      }
                  }
@@ -344,7 +349,7 @@ namespace ChessWebsite.DTOs
         }
         private void CalculateKingMoves(Square king)
         {
-            CurrentPlayer().CheckedByHowManyPiece = 0;
+            currentPlayer.CheckedByHowManyPiece = 0;
             Square targetsquare;
             for(int f = -1; f <= 1; f++)
                 for(int r = -1; r <= 1; r++)
@@ -396,8 +401,19 @@ namespace ChessWebsite.DTOs
         }
         private void AddMove(Move m)
         {   
-            m.TargetSquare.AddToTargetedBy(m.CurrentSquare.OccupingPiece[0]);
-            LegalMoves.Add(m);
+
+            if(m.CurrentSquare.OccupingPiece[1] != 'P')
+                m.TargetSquare.AddToTargetedBy(m.CurrentSquare.OccupingPiece[0]);
+            if(currentPlayer.CheckedByHowManyPiece == 1)
+            {
+                if(LegalCheckSquares.Contains(m.TargetSquare))
+                {
+                    LegalMoves.Add(m);
+
+                }
+            }
+            else
+                LegalMoves.Add(m);
         }
         public static Move GetMoveBySquareNames(string currentsquare, string targetsquare)
         {
@@ -406,29 +422,57 @@ namespace ChessWebsite.DTOs
         public void KingCondition(Square king)
         {
             Square targetsquare;
+            int targetfile;
+            int targetrank;
+            LegalCheckSquares.Clear();
             for(int f = -1; f <= 1; f++)
                 for(int r = -1; r <= 1; r++)
                 {
-                    LegalCheckSquares.Clear();
-                    for(int length = 1; length<9 ; length++)
-                    if(r != 0 || f != 0)
+                    if((r != 0 || f != 0) && currentPlayer.CheckedByHowManyPiece != 2) // queen
                     {
-                        var targetrank = king.Rank + r*length;
-                        var targetfile = king.File + f*length;
-                        if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                        for(int length = 1; length<9 ; length++)
                         {
-                            targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                            LegalCheckSquares.Add(targetsquare)
-                            if(targetsquare.OccupingPiece != "")
+                            targetrank = king.Rank + r*length;
+                            targetfile = king.File + f*length;
+                            if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                             {
-                                if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                LegalCheckSquares.Add(targetsquare);
+                                if(targetsquare.OccupingPiece != "")
                                 {
-                                    if(targetsquare.OccupingPiece[1] == 'Q')
-                                        currentPlayer.CheckedByHowManyPiece += 1;
+                                    if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                    {
+                                        if(targetsquare.OccupingPiece[1] == 'Q')
+                                            currentPlayer.CheckedByHowManyPiece += 1;
+                                    }
+                                    if(currentPlayer.CheckedByHowManyPiece != 1)
+                                        LegalCheckSquares.Clear();
+                                    break;
                                 }
-                                if(currentPlayer.CheckedByHowManyPiece != 1)
-                                    LegalCheckSquares.Clear();
-                                break;
+                            }
+                        }
+                    }
+                    if((r != 0 & f != 0) && currentPlayer.CheckedByHowManyPiece != 2) // bishop
+                    {
+                        for(int length = 1; length<9 ; length++)
+                        {
+                            targetrank = king.Rank + r*length;
+                            targetfile = king.File + f*length;
+                            if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                            {
+                                targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                LegalCheckSquares.Add(targetsquare);
+                                if(targetsquare.OccupingPiece != "")
+                                {
+                                    if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                    {
+                                        if(targetsquare.OccupingPiece[1] == 'B')
+                                            currentPlayer.CheckedByHowManyPiece += 1;
+                                    }
+                                    if(currentPlayer.CheckedByHowManyPiece != 1)
+                                        LegalCheckSquares.Clear();
+                                    break;
+                                }
                             }
                         }
                     }
