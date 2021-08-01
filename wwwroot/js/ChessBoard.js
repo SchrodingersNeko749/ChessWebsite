@@ -154,8 +154,6 @@ function ColorSquare(squarename, color)
 {
     sq = GetSquare(squarename)
     sq.PieceElement.style.backgroundColor = color
-    sq.PieceElement.style.border = "solid"
-    sq.PieceElement.style.borderColor = "white"
 }
 function deColorBoard()
 {

@@ -9,11 +9,8 @@ namespace ChessWebsite.DTOs
         public static Player BlackPlayer {get;set;}
         static Board ()
         {
-            WhitePlayer = new Player("whitename", true);
-            BlackPlayer = new Player("blackname", false);
             SetupBoard();
             SetupPieces();
-        
         }
         private static void SetupPieces()
         {

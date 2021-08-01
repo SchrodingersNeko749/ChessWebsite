@@ -2,11 +2,11 @@ namespace ChessWebsite.Services
 {
     public class Player
     {
-        public Player(string name, bool is_white)
+        public Player(string name)
         {
             Name = name;
         }
-        public bool inCheck = false;
+        public int CheckedByHowManyPiece;
         public string Name;
 
     }

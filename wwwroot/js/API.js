@@ -7,7 +7,11 @@ function GetMoveFromAPI(currentSquare)
     LegalMoves.splice(0, LegalMoves.length)
     data.forEach(move => {
       LegalMoves.push(move)
+      if(move.check == true)
+      ColorSquare(move.targetSquare.name, "red")
+      else
       ColorSquare(move.targetSquare.name, "rgba(232, 199, 109,0.4)")
+      
     });
     //ColorLegalSquares()
   })

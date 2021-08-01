@@ -11,7 +11,7 @@ namespace ChessWebsite.Services
         public ChessLogic chessLogic;//entity that calculates legal moves 
         public GameManager()
         {
-            chessLogic = new ChessLogic();
+            chessLogic = new ChessLogic(new Player ("whitename"), new Player ("blackname") );
         }
         public Move RandomMove()
         {

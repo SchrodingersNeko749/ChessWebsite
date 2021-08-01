@@ -1,48 +1,69 @@
 using System.Linq;
+using ChessWebsite.Services;
 using System.Collections.Generic;
 namespace ChessWebsite.DTOs
 {
     public class ChessLogic
     {
+        private Player currentPlayer;
+        private Player whiteplayer;
+        private List<Square> LegalCheckSquares = new List<Square>(); // list of squares that player can block to escape check
+        private Player blackplayer;
         public static Move LastMove = new Move(Board.ChessBoard[0], Board.ChessBoard[0]);
         public static List<Move> LegalMoves = new List<Move>();
+        private List<Square> BlockCheckSquares = new List<Square>();
+        public ChessLogic(Player white, Player black)
+        {
+            whiteplayer = white;
+            blackplayer = black;
+        }
         public void CalculateLegalMoves()
         {
+            currentPlayer = CurrentPlayer();
             LegalMoves.Clear();
-            foreach(Square square in Board.ChessBoard)
+            Square whiteking = new Square(65);//just to assign a value to variable
+            Square blackking = new Square(65);//just to assign a value to variable
+            
+            foreach (var sq in Board.ChessBoard)
             {
-                square.Targetedby[0] = 'n';
-                square.Targetedby[1] = 'n';
+                sq.Targetedby[0] = 'n';
+                sq.Targetedby[1] = 'n';
+                if(sq.OccupingPiece == "wK")
+                    whiteking = sq;
+                if(sq.OccupingPiece == "bK")
+                    blackking = sq;      
             }
-                
-            Square whiteking = Board.ChessBoard[0];
-            Square blackking = Board.ChessBoard[0];
+            if(GameManager.isWhiteTurn)
+                KingCondition(whiteking);
+            else
+                KingCondition(blackking);
             foreach (Square piece in Board.ChessBoard)
             {
                 if(piece.OccupingPiece != "")
                 switch (piece.OccupingPiece[1])
                 {
                     case 'P':
+                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculatePawnMoves(piece); 
                     break;    
                     case 'Q':
+                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculateQueenMoves(piece);  
                     break;       
                     case 'N':
+                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculateKnightMoves(piece);
                     break;
                     case 'B':
+                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculateBishopMoves(piece);
                     break;
                     case 'R':
+                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculateRookMoves(piece);
                     break;
                     case 'K':
                     CalculateKingTargetSquares(piece);
-                        if(piece.OccupingPiece[0] == 'w')
-                            whiteking = piece;
-                        else 
-                            blackking = piece;
                     break;
                 }       
             }
@@ -55,7 +76,6 @@ namespace ChessWebsite.DTOs
              Square pawn1square;
              Square pawncaptureright;
              Square pawncaptureleft;
-             
              if(pawn.OccupingPiece[0] == 'w') //pawns go up
              {
                  //pawn forward move
@@ -203,6 +223,10 @@ namespace ChessWebsite.DTOs
                                     }
                                     AddMove(new Move(rook, targetsquare));
                                  }
+                                  else
+                                 {
+                                     targetsquare.AddToTargetedBy(rook.OccupingPiece[0]);
+                                 }
                                 break;
                              }
                              else
@@ -238,6 +262,10 @@ namespace ChessWebsite.DTOs
                                         }
                                     }
                                      AddMove(new Move(queen, targetsquare));
+                                 }
+                                 else
+                                 {
+                                     targetsquare.AddToTargetedBy(queen.OccupingPiece[0]);
                                  }
                                 break;
                              }
@@ -275,6 +303,10 @@ namespace ChessWebsite.DTOs
                                     }
                                     AddMove(new Move(bishop, targetsquare));
                                  }
+                                  else
+                                 {
+                                     targetsquare.AddToTargetedBy(bishop.OccupingPiece[0]);
+                                 }
                                 break;
                              }
                              else
@@ -300,6 +332,11 @@ namespace ChessWebsite.DTOs
                             else
                                 if(targetsquare.OccupingPiece[0] != knight.OccupingPiece[0])
                                     AddMove(new Move(knight,targetsquare));
+                                 else
+                                 {
+                                     targetsquare.AddToTargetedBy(knight.OccupingPiece[0]);
+                                 }
+                                    
                         }
                             
                     }
@@ -307,6 +344,7 @@ namespace ChessWebsite.DTOs
         }
         private void CalculateKingMoves(Square king)
         {
+            CurrentPlayer().CheckedByHowManyPiece = 0;
             Square targetsquare;
             for(int f = -1; f <= 1; f++)
                 for(int r = -1; r <= 1; r++)
@@ -351,7 +389,6 @@ namespace ChessWebsite.DTOs
         }
         private bool isIllegalSquareForKing(Square targetsquare,char kingcolor)
         {
-
             if(kingcolor == 'w')
                 return targetsquare.Targetedby.Contains('b');
             else
@@ -359,7 +396,6 @@ namespace ChessWebsite.DTOs
         }
         private void AddMove(Move m)
         {   
-            //m.CurrentSquare.AddToTargetedBy(m.CurrentSquare.OccupingPiece[0]);
             m.TargetSquare.AddToTargetedBy(m.CurrentSquare.OccupingPiece[0]);
             LegalMoves.Add(m);
         }
@@ -367,6 +403,43 @@ namespace ChessWebsite.DTOs
         {
             return LegalMoves.SingleOrDefault(mv => mv.CurrentSquare.Name == currentsquare &&  mv.TargetSquare.Name == targetsquare);
         }
-        
+        public void KingCondition(Square king)
+        {
+            Square targetsquare;
+            for(int f = -1; f <= 1; f++)
+                for(int r = -1; r <= 1; r++)
+                {
+                    LegalCheckSquares.Clear();
+                    for(int length = 1; length<9 ; length++)
+                    if(r != 0 || f != 0)
+                    {
+                        var targetrank = king.Rank + r*length;
+                        var targetfile = king.File + f*length;
+                        if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                        {
+                            targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                            LegalCheckSquares.Add(targetsquare)
+                            if(targetsquare.OccupingPiece != "")
+                            {
+                                if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                {
+                                    if(targetsquare.OccupingPiece[1] == 'Q')
+                                        currentPlayer.CheckedByHowManyPiece += 1;
+                                }
+                                if(currentPlayer.CheckedByHowManyPiece != 1)
+                                    LegalCheckSquares.Clear();
+                                break;
+                            }
+                        }
+                    }
+                }
+        }
+        public Player CurrentPlayer()
+        {
+            if(GameManager.isWhiteTurn)
+                return whiteplayer;
+            else
+                return blackplayer;
+        }
     }
 }
