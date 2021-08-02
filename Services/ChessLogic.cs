@@ -408,6 +408,7 @@ namespace ChessWebsite.DTOs
             {
                 if(LegalCheckSquares.Contains(m.TargetSquare))
                 {
+                    m.SpecialMove = "blockcheck";
                     LegalMoves.Add(m);
 
                 }
@@ -426,57 +427,149 @@ namespace ChessWebsite.DTOs
             int targetrank;
             LegalCheckSquares.Clear();
             for(int f = -1; f <= 1; f++)
-                for(int r = -1; r <= 1; r++)
+                for(int r = -1 ; r <= 1; r ++)
                 {
-                    if((r != 0 || f != 0) && currentPlayer.CheckedByHowManyPiece != 2) // queen
-                    {
-                        for(int length = 1; length<9 ; length++)
+                        if((r != 0 || f != 0) && currentPlayer.CheckedByHowManyPiece == 0) // queen
                         {
-                            targetrank = king.Rank + r*length;
-                            targetfile = king.File + f*length;
-                            if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                            LegalCheckSquares.Clear();
+                            for(int length = 1; length<9 ; length++)
                             {
-                                targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                LegalCheckSquares.Add(targetsquare);
-                                if(targetsquare.OccupingPiece != "")
+                                targetrank = king.Rank + r*length;
+                                targetfile = king.File + f*length;
+                                if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                                 {
-                                    if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                    targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                    LegalCheckSquares.Add(targetsquare);
+                                    if(targetsquare.OccupingPiece != "")
                                     {
-                                        if(targetsquare.OccupingPiece[1] == 'Q')
-                                            currentPlayer.CheckedByHowManyPiece += 1;
+                                        if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                        {
+                                            if(targetsquare.OccupingPiece[1] == 'Q')
+                                                currentPlayer.CheckedByHowManyPiece += 1;
+                                        }
+                                        if(currentPlayer.CheckedByHowManyPiece != 1)
+                                            LegalCheckSquares.Clear();
+                                        break;
                                     }
-                                    if(currentPlayer.CheckedByHowManyPiece != 1)
-                                        LegalCheckSquares.Clear();
-                                    break;
                                 }
                             }
                         }
-                    }
-                    if((r != 0 & f != 0) && currentPlayer.CheckedByHowManyPiece != 2) // bishop
-                    {
-                        for(int length = 1; length<9 ; length++)
+                        if((r != 0 & f != 0) && currentPlayer.CheckedByHowManyPiece == 0) // bishop
                         {
-                            targetrank = king.Rank + r*length;
-                            targetfile = king.File + f*length;
-                            if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                            for(int length = 1; length<9 ; length++)
                             {
-                                targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                LegalCheckSquares.Add(targetsquare);
-                                if(targetsquare.OccupingPiece != "")
+                                targetrank = king.Rank + r*length;
+                                targetfile = king.File + f*length;
+                                if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                                 {
-                                    if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                    targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                    LegalCheckSquares.Add(targetsquare);
+                                    if(targetsquare.OccupingPiece != "")
                                     {
-                                        if(targetsquare.OccupingPiece[1] == 'B')
-                                            currentPlayer.CheckedByHowManyPiece += 1;
+                                        if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                        {
+                                            if(targetsquare.OccupingPiece[1] == 'B')
+                                                currentPlayer.CheckedByHowManyPiece += 1;
+                                        }
+                                        if(currentPlayer.CheckedByHowManyPiece != 1)
+                                            LegalCheckSquares.Clear();
+                                        break;
                                     }
-                                    if(currentPlayer.CheckedByHowManyPiece != 1)
-                                        LegalCheckSquares.Clear();
-                                    break;
                                 }
                             }
                         }
-                    }
+                        if((r!=f && (r +f) != 0) && currentPlayer.CheckedByHowManyPiece == 0) //Rook
+                        {
+                            LegalCheckSquares.Clear();
+                            for(int length = 1; length<9 ; length++)
+                            {
+                                targetrank = king.Rank + r*length;
+                                targetfile = king.File + f*length;
+                                if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                                {
+                                    targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                    LegalCheckSquares.Add(targetsquare);
+                                    if(targetsquare.OccupingPiece != "")
+                                    {
+                                        if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                        {
+                                            if(targetsquare.OccupingPiece[1] == 'R')
+                                                currentPlayer.CheckedByHowManyPiece += 1;
+                                        }
+                                        if(currentPlayer.CheckedByHowManyPiece != 1)
+                                            LegalCheckSquares.Clear();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                 }
+                //knight
+                if(currentPlayer.CheckedByHowManyPiece == 0)
+                {
+                    LegalCheckSquares.Clear();
+                    for(int r = -2 ; r < 3; r ++)
+                    for(int f = -2; f < 3 ; f++)
+                    {
+                        if((r != 0 && f !=0 && r/f!=1 && r/f != -1) && currentPlayer.CheckedByHowManyPiece == 0)
+                        {
+                            LegalCheckSquares.Clear();
+                            targetrank = king.Rank + r;
+                            targetfile = king.File + f;
+                            if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                            {
+                                targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                LegalCheckSquares.Add(targetsquare);
+                                if(targetsquare.OccupingPiece != "")
+                                {
+                                    if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
+                                    {
+                                        if(targetsquare.OccupingPiece[1] == 'N')
+                                        {
+                                            currentPlayer.CheckedByHowManyPiece += 1;
+                                            break;
+                                        }
+                                    }
+                                    if(currentPlayer.CheckedByHowManyPiece != 1)
+                                        LegalCheckSquares.Clear();
+                                }       
+                            }
+                                
+                        }
+                    }
+                    //pawn
+                    // if(currentPlayer.CheckedByHowManyPiece == 0)
+                    // {
+                    //     LegalCheckSquares.Clear();
+                    //     for(int r = -1; r <= 1; r+=2)
+                    //         for(int f = -1; f <= 1; f+=2)
+                    //         {
+                    //                 targetrank = king.Rank + r;
+                    //                 targetfile = king.File + f;
+                    //                 if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                    //                 {
+                    //                     targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                    //                     LegalCheckSquares.Add(targetsquare);
+                    //                     if(GameManager.isWhiteTurn && r == 1  && currentPlayer.CheckedByHowManyPiece == 0)
+                    //                     {
+                    //                         if(targetsquare.OccupingPiece == "bP")
+                    //                             currentPlayer.CheckedByHowManyPiece += 1;
+                    //                     }
+                    //                     else
+                    //                     {
+                    //                         if(!GameManager.isWhiteTurn && r == -1 && currentPlayer.CheckedByHowManyPiece == 0)
+                    //                         {
+                    //                             if(targetsquare.OccupingPiece == "wP")
+                    //                                 currentPlayer.CheckedByHowManyPiece += 1;
+                    //                         }
+                    //                     }
+                    //             }
+                    //             if(currentPlayer.CheckedByHowManyPiece == 0)
+                    //                 LegalCheckSquares.Clear();
+                    //         }
+                    // }
+                }
+
         }
         public Player CurrentPlayer()
         {
