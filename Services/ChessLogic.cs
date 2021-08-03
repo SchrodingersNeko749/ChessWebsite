@@ -5,16 +5,16 @@ namespace ChessWebsite.DTOs
 {
     public class ChessLogic
     {
-        private Player currentPlayer;
-        private Player whiteplayer;
+        public static Player currentPlayer;
+        public static Player WhitePlayer;
         private List<Square> LegalCheckSquares = new List<Square>(); // list of squares that player can block to escape check
-        private Player blackplayer;
+        public static Player BlackPlayer;
         public static Move LastMove = new Move(Board.ChessBoard[0], Board.ChessBoard[0]);
         public static List<Move> LegalMoves = new List<Move>();
         public ChessLogic(Player white, Player black)
         {
-            whiteplayer = white;
-            blackplayer = black;
+            WhitePlayer = white;
+            BlackPlayer = black;
         }
         public void CalculateLegalMoves()
         {
@@ -28,6 +28,7 @@ namespace ChessWebsite.DTOs
             {
                 sq.Targetedby[0] = 'n';
                 sq.Targetedby[1] = 'n';
+                sq.isPinned = false;
                 if(sq.OccupingPiece == "wK")
                     whiteking = sq;
                 if(sq.OccupingPiece == "bK")
@@ -374,6 +375,9 @@ namespace ChessWebsite.DTOs
                                 targetsquare.AddToTargetedBy(king.OccupingPiece[0]);
                         }
                     }
+            
+            CastleShort(king);
+            CastleLong(king);
         }
         public void CalculateKingTargetSquares(Square king)
         {
@@ -402,19 +406,23 @@ namespace ChessWebsite.DTOs
         private void AddMove(Move m)
         {   
 
-            if(m.CurrentSquare.OccupingPiece[1] != 'P')
+            if(m.CurrentSquare.OccupingPiece[1] != 'P') 
                 m.TargetSquare.AddToTargetedBy(m.CurrentSquare.OccupingPiece[0]);
             if(currentPlayer.CheckedByHowManyPiece == 1)
             {
                 if(LegalCheckSquares.Contains(m.TargetSquare))
                 {
                     m.SpecialMove = "blockcheck";
-                    LegalMoves.Add(m);
+                    if(!m.CurrentSquare.isPinned)
+                        LegalMoves.Add(m);
 
                 }
             }
             else
-                LegalMoves.Add(m);
+            {
+                if(!m.CurrentSquare.isPinned)
+                    LegalMoves.Add(m);
+            }
         }
         public static Move GetMoveBySquareNames(string currentsquare, string targetsquare)
         {
@@ -429,9 +437,10 @@ namespace ChessWebsite.DTOs
             for(int f = -1; f <= 1; f++)
                 for(int r = -1 ; r <= 1; r ++)
                 {
-                        if((r != 0 || f != 0) && currentPlayer.CheckedByHowManyPiece == 0) // queen
+                        if(r != 0 || f != 0) // queen
                         {
-                            LegalCheckSquares.Clear();
+                            if(currentPlayer.CheckedByHowManyPiece == 0)
+                                LegalCheckSquares.Clear();
                             for(int length = 1; length<9 ; length++)
                             {
                                 targetrank = king.Rank + r*length;
@@ -439,7 +448,8 @@ namespace ChessWebsite.DTOs
                                 if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                                 {
                                     targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                    LegalCheckSquares.Add(targetsquare);
+                                    if(currentPlayer.CheckedByHowManyPiece == 0)
+                                        LegalCheckSquares.Add(targetsquare);
                                     if(targetsquare.OccupingPiece != "")
                                     {
                                         if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
@@ -447,8 +457,11 @@ namespace ChessWebsite.DTOs
                                             if(targetsquare.OccupingPiece[1] == 'Q')
                                                 currentPlayer.CheckedByHowManyPiece += 1;
                                         }
-                                        if(currentPlayer.CheckedByHowManyPiece != 1)
-                                            LegalCheckSquares.Clear();
+                                        else
+                                        {
+                                            isPinned(targetsquare, r, f, length);
+                                        }
+                                        ClearCheckSquares();
                                         break;
                                     }
                                 }
@@ -471,8 +484,7 @@ namespace ChessWebsite.DTOs
                                             if(targetsquare.OccupingPiece[1] == 'B')
                                                 currentPlayer.CheckedByHowManyPiece += 1;
                                         }
-                                        if(currentPlayer.CheckedByHowManyPiece != 1)
-                                            LegalCheckSquares.Clear();
+                                        ClearCheckSquares();
                                         break;
                                     }
                                 }
@@ -496,8 +508,7 @@ namespace ChessWebsite.DTOs
                                             if(targetsquare.OccupingPiece[1] == 'R')
                                                 currentPlayer.CheckedByHowManyPiece += 1;
                                         }
-                                        if(currentPlayer.CheckedByHowManyPiece != 1)
-                                            LegalCheckSquares.Clear();
+                                        ClearCheckSquares();
                                         break;
                                     }
                                 }
@@ -530,8 +541,7 @@ namespace ChessWebsite.DTOs
                                             break;
                                         }
                                     }
-                                    if(currentPlayer.CheckedByHowManyPiece != 1)
-                                        LegalCheckSquares.Clear();
+                                    ClearCheckSquares();
                                 }       
                             }
                                 
@@ -565,19 +575,119 @@ namespace ChessWebsite.DTOs
                                             }
                                         }
                                 }
-                                if(currentPlayer.CheckedByHowManyPiece == 0)
-                                    LegalCheckSquares.Clear();
+                                ClearCheckSquares();
                             }
                     }
                 }
+                if(GameManager.isWhiteTurn)
+                {
+                    if(Board.GetSquareByName("h1").OccupingPiece != "wR")
+                        currentPlayer.CanCastleShort = false;
+                    if(Board.GetSquareByName("a1").OccupingPiece != "wR")
+                        currentPlayer.CanCastleLong = false;
+                }
+                else
+                {
+                    if(Board.GetSquareByName("h8").OccupingPiece != "bR")
+                        currentPlayer.CanCastleShort = false;
+                    if(Board.GetSquareByName("a8").OccupingPiece != "bR")
+                        currentPlayer.CanCastleLong = false;
+                }
 
+        }
+        public void isPinned(Square pinnedsquare, int r, int f, int length)// r and f are directions
+        {
+            int targetrank;
+            int targetfile;
+            Square targetsquare;
+            for(int l = 1; l<9-length; l++)
+            {
+                targetrank = pinnedsquare.Rank + r*l;
+                targetfile = pinnedsquare.File + f*l;
+                if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                {
+                    targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                    if(targetsquare.OccupingPiece != "")
+                    {
+                        if(targetsquare.OccupingPiece[0] != pinnedsquare.OccupingPiece[0])
+                            {
+                                if(r*f == 0) //queen or rook
+                                {
+                                    if(targetsquare.OccupingPiece[1] == 'Q' || targetsquare.OccupingPiece[1] == 'R')
+                                        pinnedsquare.isPinned = true;
+                                }
+                                else//queen or bishop
+                                {
+                                    if(targetsquare.OccupingPiece[1] == 'Q' || targetsquare.OccupingPiece[1] == 'B')
+                                        pinnedsquare.isPinned = true;
+                                }
+
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        void CastleShort(Square king)
+        {
+            if(currentPlayer.CanCastleShort && currentPlayer.CheckedByHowManyPiece == 0)
+            {
+                if(king.OccupingPiece[0] == 'w')
+                {
+                    var fsquare = Board.GetSquareByName("f1");
+                    var gsquare = Board.GetSquareByName("g1");
+                    if(fsquare.OccupingPiece == "" && gsquare.OccupingPiece =="" && !fsquare.Targetedby.Contains('b') && !gsquare.Targetedby.Contains('b'))
+                    {
+                        AddMove(new Move(king, gsquare, "f1"));
+                    }
+                }
+                else
+                {
+                    var fsquare = Board.GetSquareByName("f8");
+                    var gsquare = Board.GetSquareByName("g8");
+                    if(fsquare.OccupingPiece == "" && gsquare.OccupingPiece =="" && !fsquare.Targetedby.Contains('w') && !gsquare.Targetedby.Contains('w'))
+                    {
+                        AddMove(new Move(king, gsquare, "f8"));
+                    }
+                }
+            }
+        }
+        void CastleLong(Square king)
+        {
+            if(currentPlayer.CanCastleLong && currentPlayer.CheckedByHowManyPiece == 0)
+            {
+                if(king.OccupingPiece[0] == 'w')
+                {
+                    var dsquare = Board.GetSquareByName("d1");
+                    var csquare = Board.GetSquareByName("c1");
+                    if(dsquare.OccupingPiece == "" && csquare.OccupingPiece =="" && !dsquare.Targetedby.Contains('b') && !csquare.Targetedby.Contains('b'))
+                    {
+                        AddMove(new Move(king, csquare, "d1"));
+                    }
+                }
+                else
+                {
+                    var dsquare = Board.GetSquareByName("d8");
+                    var csquare = Board.GetSquareByName("c8");
+                    if(dsquare.OccupingPiece == "" && csquare.OccupingPiece =="" && !dsquare.Targetedby.Contains('w') && !csquare.Targetedby.Contains('w'))
+                    {
+                        AddMove(new Move(king, csquare, "d8"));
+                    }
+                }
+            }
+        }
+        public void ClearCheckSquares()
+        {
+            if(currentPlayer.CheckedByHowManyPiece != 1)
+                LegalCheckSquares.Clear();
         }
         public Player CurrentPlayer()
         {
             if(GameManager.isWhiteTurn)
-                return whiteplayer;
+                return WhitePlayer;
             else
-                return blackplayer;
+                return BlackPlayer;
         }
+
     }
 }

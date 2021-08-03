@@ -75,9 +75,37 @@ function DragStart(ev) {
         else
           Board[index-8].PieceElement.style.backgroundImage = "none"
         break;
+      case "f1":
+        TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+        PickedPiece.style.backgroundImage = "none"
+        GetSquare("f1").PieceElement.style.backgroundImage = GetSquare("h1").PieceElement.style.backgroundImage 
+        GetSquare("h1").PieceElement.style.backgroundImage = "none"
+        SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, LastMove.specialMove)
+        break;
+      case "f8":
+          TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+          PickedPiece.style.backgroundImage = "none"
+          GetSquare("f8").PieceElement.style.backgroundImage = GetSquare("h8").PieceElement.style.backgroundImage 
+          GetSquare("h8").PieceElement.style.backgroundImage = "none"
+          SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, LastMove.specialMove)
+          break;
+      case "d1":
+        TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+        PickedPiece.style.backgroundImage = "none"
+        GetSquare("d1").PieceElement.style.backgroundImage = GetSquare("a1").PieceElement.style.backgroundImage 
+        GetSquare("a1").PieceElement.style.backgroundImage = "none"
+        SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, LastMove.specialMove)
+        break;
+      case "d8":
+        TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
+        PickedPiece.style.backgroundImage = "none"
+        GetSquare("d8").PieceElement.style.backgroundImage = GetSquare("a8").PieceElement.style.backgroundImage 
+        GetSquare("a8").PieceElement.style.backgroundImage = "none"
+        SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, LastMove.specialMove)
+        break;
       default:
         TargetedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
-        SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, promotingpiece)
+        SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name)
         break;
     }
     PickedPiece.style.backgroundImage = "none"

@@ -17,6 +17,7 @@ namespace ChessWebsite.DTOs
         public int File {get; set;}
         public int SquareIndex {get; set;}
         public char[] Targetedby {get; set;}
+        public bool isPinned{get;set;}
         private string SquareName(int number)
          {
             char[] filenamemap = new char[8]; // bad name

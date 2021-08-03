@@ -177,12 +177,12 @@ function GetLegalMovebySquare(tragetsquarename)
     }
 function ModaiSelectPiece(modaiselectedpiece)
 {
-    url = 'url("'+ modaiselectedpiece.currentSrc.slice(22) + '")'
+    pieceurl = 'url("'+ modaiselectedpiece.currentSrc.slice(22) + '")'
     if(isWhiteMove)
-        url = url.replace(/w/, 'b')
+        pieceurl = pieceurl.replace(/w/, 'b')
     PromotionModal.style.display = "none"
-    TargetedSquare.PieceElement.style.backgroundImage = url
-    SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, ""+url[13]+url[14])
+    TargetedSquare.PieceElement.style.backgroundImage = pieceurl
+    SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, ""+pieceurl[13]+pieceurl[14])
 }
 class Square
 {

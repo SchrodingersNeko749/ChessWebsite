@@ -54,9 +54,55 @@ namespace ChessWebsite.Services
                     CurrentSquare.OccupingPiece = "";
                     enpassant.OccupingPiece = "";
                 break;
+                case "f1": //white castle short
+                    TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
+                    CurrentSquare.OccupingPiece = "";
+                    Board.GetSquareByName("f1").OccupingPiece = Board.GetSquareByName("h1").OccupingPiece;
+                    Board.GetSquareByName("h1").OccupingPiece = "";
+                    ChessLogic.WhitePlayer.CanCastleShort = false;
+                    ChessLogic.WhitePlayer.CanCastleLong = false;
+
+                break;
+                case "f8": //black castle short
+                    TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
+                    CurrentSquare.OccupingPiece = "";
+                    Board.GetSquareByName("f8").OccupingPiece = Board.GetSquareByName("h8").OccupingPiece;
+                    Board.GetSquareByName("h8").OccupingPiece = "";
+                    ChessLogic.BlackPlayer.CanCastleShort = false;
+                    ChessLogic.BlackPlayer.CanCastleLong = false;
+                break;
+                case "d1"://white castle long
+                    TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
+                    CurrentSquare.OccupingPiece = "";
+                    Board.GetSquareByName("d1").OccupingPiece = Board.GetSquareByName("a1").OccupingPiece;
+                    Board.GetSquareByName("d1").OccupingPiece = "";
+                    ChessLogic.WhitePlayer.CanCastleShort = false;
+                    ChessLogic.WhitePlayer.CanCastleLong = false;
+                break;
+                case "d8"://black castle long
+                    TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
+                    CurrentSquare.OccupingPiece = "";
+                    Board.GetSquareByName("d8").OccupingPiece = Board.GetSquareByName("a8").OccupingPiece;
+                    Board.GetSquareByName("d8").OccupingPiece = "";
+                    ChessLogic.WhitePlayer.CanCastleShort = false;
+                    ChessLogic.WhitePlayer.CanCastleLong = false;
+                break;
                 default:
                     TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
                     CurrentSquare.OccupingPiece = "";
+                    if(currentsquarename != targetsquarename)
+                    {
+                        if(CurrentSquare.OccupingPiece == "wK")
+                        {
+                            ChessLogic.WhitePlayer.CanCastleShort = false;
+                            ChessLogic.WhitePlayer.CanCastleLong = false;
+                        }
+                        if(CurrentSquare.OccupingPiece == "bK")
+                        {
+                            ChessLogic.BlackPlayer.CanCastleShort = false;
+                            ChessLogic.BlackPlayer.CanCastleLong = false;
+                        }
+                    }
                 break;
             }
             isWhiteTurn = !isWhiteTurn;

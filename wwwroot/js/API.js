@@ -11,7 +11,6 @@ function GetMoveFromAPI(currentSquare)
         ColorSquare(move.targetSquare.name, "red")
       else
         ColorSquare(move.targetSquare.name, "rgba(232, 199, 109,0.4)")
-      
     });
     //ColorLegalSquares()
   })
