@@ -538,36 +538,37 @@ namespace ChessWebsite.DTOs
                         }
                     }
                     //pawn
-                    // if(currentPlayer.CheckedByHowManyPiece == 0)
-                    // {
-                    //     LegalCheckSquares.Clear();
-                    //     for(int r = -1; r <= 1; r+=2)
-                    //         for(int f = -1; f <= 1; f+=2)
-                    //         {
-                    //                 targetrank = king.Rank + r;
-                    //                 targetfile = king.File + f;
-                    //                 if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
-                    //                 {
-                    //                     targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                    //                     LegalCheckSquares.Add(targetsquare);
-                    //                     if(GameManager.isWhiteTurn && r == 1  && currentPlayer.CheckedByHowManyPiece == 0)
-                    //                     {
-                    //                         if(targetsquare.OccupingPiece == "bP")
-                    //                             currentPlayer.CheckedByHowManyPiece += 1;
-                    //                     }
-                    //                     else
-                    //                     {
-                    //                         if(!GameManager.isWhiteTurn && r == -1 && currentPlayer.CheckedByHowManyPiece == 0)
-                    //                         {
-                    //                             if(targetsquare.OccupingPiece == "wP")
-                    //                                 currentPlayer.CheckedByHowManyPiece += 1;
-                    //                         }
-                    //                     }
-                    //             }
-                    //             if(currentPlayer.CheckedByHowManyPiece == 0)
-                    //                 LegalCheckSquares.Clear();
-                    //         }
-                    // }
+                    if(currentPlayer.CheckedByHowManyPiece == 0)
+                    {
+                        LegalCheckSquares.Clear();
+                        for(int r = -1; r <= 1; r+=2)
+                            for(int f = -1; f <= 1; f+=2)
+                            {
+                                LegalCheckSquares.Clear();
+                                    targetrank = king.Rank + r;
+                                    targetfile = king.File + f;
+                                    if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                                    {
+                                        targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                        LegalCheckSquares.Add(targetsquare);
+                                        if(GameManager.isWhiteTurn && r == 1  && currentPlayer.CheckedByHowManyPiece == 0)
+                                        {
+                                            if(targetsquare.OccupingPiece == "bP")
+                                                currentPlayer.CheckedByHowManyPiece += 1;
+                                        }
+                                        else
+                                        {
+                                            if(!GameManager.isWhiteTurn && r == -1 && currentPlayer.CheckedByHowManyPiece == 0)
+                                            {
+                                                if(targetsquare.OccupingPiece == "wP")
+                                                    currentPlayer.CheckedByHowManyPiece += 1;
+                                            }
+                                        }
+                                }
+                                if(currentPlayer.CheckedByHowManyPiece == 0)
+                                    LegalCheckSquares.Clear();
+                            }
+                    }
                 }
 
         }
