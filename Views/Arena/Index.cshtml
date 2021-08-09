@@ -1,20 +1,40 @@
 
 <html>
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/chessboard.css">
+  <link rel="stylesheet" type="text/css" href="css/promotion.css">
+  <link rel="stylesheet" type="text/css" href="css/UI.css">
+
   <script type="text/javascript" src="js/ChessBoard.js"></script>
   <script type="text/javascript" src="js/MovePieces.js"></script>
   <script type="text/javascript" src="js/API.js"></script>
-</head>
-<body>
-  <button onclick="SetupBoard()">SetupBoard</button>
-  <div class="grid-container">
-  <div class="grid-item" onmousedown="DragStart(event)"></div>
-  @*(i add 63 more grid-item elements in js)*@
-</div>
-<div id="picked-piece" ></div>
+  <script type="text/javascript" src="js/modai.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
+</head>
+<body  onload="SetupBoard()">
+  <nav class="navbar navbar-light container-fluid" style="background-color: #F6E1CA; display: -webkit-inline-box;">
+    <div style="display: contents">
+      <img style= "width: 72px; height: 72px"src="/Pieces/bK.png">
+      <h1 style="font-weight: 700; padding: 12">Pladimir Chess</h1>
+    </div>
+  </nav>
+  <div class="board">
+    <div class="square" onmousedown="DragStart(event)"></div>
+  </div>
+<div id="picked-piece" ></div>
+  <div style="display: inline-grid;">
+      <div class="name">blackname</div>
+      <button onclick="RestartGame()" style="font-family: Arial, Helvetica, sans-serif; font-size : 30px; background-color:#38322a; color: #ffffffa8; width: 300; height: 100;">
+        Restart Match</button>
+      <div class="name">whitename</div>
+  </div>
 </body>
+
+
+
+<!-- Modal -->
 <div id="PromotionModal" class="modal">
 
   <!-- Modal content -->

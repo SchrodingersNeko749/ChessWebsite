@@ -13,6 +13,12 @@ namespace ChessWebsite.Services
         {
             chessLogic = new ChessLogic(new Player ("whitename"), new Player ("blackname") );
         }
+        public void RestartGame()
+        {
+            Board.SetupBoard();
+            Board.SetupPieces();
+            chessLogic = new ChessLogic(new Player ("whitename"), new Player ("blackname") );
+        }
         public Move RandomMove()
         {
             chessLogic.CalculateLegalMoves();
@@ -33,7 +39,6 @@ namespace ChessWebsite.Services
 
         public void PlayMove(string currentsquarename, string targetsquarename, string promotingpiece)
         {
-
             ChessLogic.LastMove = ChessLogic.GetMoveBySquareNames(currentsquarename, targetsquarename);
 
             var CurrentSquare = ChessLogic.LastMove.CurrentSquare;
@@ -75,7 +80,7 @@ namespace ChessWebsite.Services
                     TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
                     CurrentSquare.OccupingPiece = "";
                     Board.GetSquareByName("d1").OccupingPiece = Board.GetSquareByName("a1").OccupingPiece;
-                    Board.GetSquareByName("d1").OccupingPiece = "";
+                    Board.GetSquareByName("a1").OccupingPiece = "";
                     ChessLogic.WhitePlayer.CanCastleShort = false;
                     ChessLogic.WhitePlayer.CanCastleLong = false;
                 break;
@@ -83,7 +88,7 @@ namespace ChessWebsite.Services
                     TargetSquare.OccupingPiece = CurrentSquare.OccupingPiece;
                     CurrentSquare.OccupingPiece = "";
                     Board.GetSquareByName("d8").OccupingPiece = Board.GetSquareByName("a8").OccupingPiece;
-                    Board.GetSquareByName("d8").OccupingPiece = "";
+                    Board.GetSquareByName("a8").OccupingPiece = "";
                     ChessLogic.WhitePlayer.CanCastleShort = false;
                     ChessLogic.WhitePlayer.CanCastleLong = false;
                 break;

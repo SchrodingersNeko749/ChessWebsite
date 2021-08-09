@@ -8,6 +8,7 @@ namespace ChessWebsite.DTOs
         public static Player currentPlayer;
         public static Player WhitePlayer;
         private List<Square> LegalCheckSquares = new List<Square>(); // list of squares that player can block to escape check
+        private List<Square> LegalPinSquares = new List<Square>();
         public static Player BlackPlayer;
         public static Move LastMove = new Move(Board.ChessBoard[0], Board.ChessBoard[0]);
         public static List<Move> LegalMoves = new List<Move>();
@@ -34,6 +35,7 @@ namespace ChessWebsite.DTOs
                 if(sq.OccupingPiece == "bK")
                     blackking = sq;      
             }
+            currentPlayer.CheckedByHowManyPiece = 0;
             if(GameManager.isWhiteTurn)
                 KingCondition(whiteking);
             else
@@ -44,27 +46,22 @@ namespace ChessWebsite.DTOs
                 switch (piece.OccupingPiece[1])
                 {
                     case 'P':
-                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculatePawnMoves(piece); 
                     break;    
                     case 'Q':
-                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculateQueenMoves(piece);  
                     break;       
                     case 'N':
-                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculateKnightMoves(piece);
                     break;
                     case 'B':
-                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculateBishopMoves(piece);
                     break;
                     case 'R':
-                    if(currentPlayer.CheckedByHowManyPiece !=2)
                         CalculateRookMoves(piece);
                     break;
                     case 'K':
-                    CalculateKingTargetSquares(piece);
+                        CalculateKingTargetSquares(piece);
                     break;
                 }       
             }
@@ -350,7 +347,7 @@ namespace ChessWebsite.DTOs
         }
         private void CalculateKingMoves(Square king)
         {
-            currentPlayer.CheckedByHowManyPiece = 0;
+            //currentPlayer.CheckedByHowManyPiece = 0;
             Square targetsquare;
             for(int f = -1; f <= 1; f++)
                 for(int r = -1; r <= 1; r++)
@@ -379,7 +376,7 @@ namespace ChessWebsite.DTOs
             CastleShort(king);
             CastleLong(king);
         }
-        public void CalculateKingTargetSquares(Square king)
+        private void CalculateKingTargetSquares(Square king)
         {
             Square targetsquare;
                         for(int f = -1; f <= 1; f++)
@@ -408,27 +405,39 @@ namespace ChessWebsite.DTOs
 
             if(m.CurrentSquare.OccupingPiece[1] != 'P') 
                 m.TargetSquare.AddToTargetedBy(m.CurrentSquare.OccupingPiece[0]);
-            if(currentPlayer.CheckedByHowManyPiece == 1)
+            
+            switch (currentPlayer.CheckedByHowManyPiece)
             {
-                if(LegalCheckSquares.Contains(m.TargetSquare))
-                {
-                    m.SpecialMove = "blockcheck";
+                case 0:
                     if(!m.CurrentSquare.isPinned)
                         LegalMoves.Add(m);
-
-                }
-            }
-            else
-            {
-                if(!m.CurrentSquare.isPinned)
-                    LegalMoves.Add(m);
+                    else
+                        {
+                            if(LegalPinSquares.Contains(m.TargetSquare))
+                                LegalMoves.Add(m);
+                        }
+                break;
+                case 1:
+                    if(m.CurrentSquare.OccupingPiece[1] == 'K')
+                        LegalMoves.Add(m);
+                    if(LegalCheckSquares.Contains(m.TargetSquare))
+                        {
+                            m.SpecialMove = "blockcheck"; // wont be in bool api
+                            if(!m.CurrentSquare.isPinned)
+                                LegalMoves.Add(m);
+                        }
+                break;
+                case 2:
+                    if(m.CurrentSquare.OccupingPiece[1] == 'K')
+                        LegalMoves.Add(m);
+                break;
             }
         }
         public static Move GetMoveBySquareNames(string currentsquare, string targetsquare)
         {
             return LegalMoves.SingleOrDefault(mv => mv.CurrentSquare.Name == currentsquare &&  mv.TargetSquare.Name == targetsquare);
         }
-        public void KingCondition(Square king)
+        private void KingCondition(Square king)
         {
             Square targetsquare;
             int targetfile;
@@ -439,8 +448,6 @@ namespace ChessWebsite.DTOs
                 {
                         if(r != 0 || f != 0) // queen
                         {
-                            if(currentPlayer.CheckedByHowManyPiece == 0)
-                                LegalCheckSquares.Clear();
                             for(int length = 1; length<9 ; length++)
                             {
                                 targetrank = king.Rank + r*length;
@@ -448,8 +455,7 @@ namespace ChessWebsite.DTOs
                                 if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                                 {
                                     targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                    if(currentPlayer.CheckedByHowManyPiece == 0)
-                                        LegalCheckSquares.Add(targetsquare);
+                                    AddCheckSquare(targetsquare);
                                     if(targetsquare.OccupingPiece != "")
                                     {
                                         if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
@@ -467,7 +473,7 @@ namespace ChessWebsite.DTOs
                                 }
                             }
                         }
-                        if((r != 0 & f != 0) && currentPlayer.CheckedByHowManyPiece == 0) // bishop
+                        if(r != 0 & f != 0) // bishop
                         {
                             for(int length = 1; length<9 ; length++)
                             {
@@ -476,7 +482,7 @@ namespace ChessWebsite.DTOs
                                 if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                                 {
                                     targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                    LegalCheckSquares.Add(targetsquare);
+                                    AddCheckSquare(targetsquare);
                                     if(targetsquare.OccupingPiece != "")
                                     {
                                         if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
@@ -490,9 +496,8 @@ namespace ChessWebsite.DTOs
                                 }
                             }
                         }
-                        if((r!=f && (r +f) != 0) && currentPlayer.CheckedByHowManyPiece == 0) //Rook
+                        if(r!=f && (r +f) != 0) //Rook
                         {
-                            LegalCheckSquares.Clear();
                             for(int length = 1; length<9 ; length++)
                             {
                                 targetrank = king.Rank + r*length;
@@ -500,7 +505,7 @@ namespace ChessWebsite.DTOs
                                 if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                                 {
                                     targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                    LegalCheckSquares.Add(targetsquare);
+                                    AddCheckSquare(targetsquare);
                                     if(targetsquare.OccupingPiece != "")
                                     {
                                         if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
@@ -516,21 +521,17 @@ namespace ChessWebsite.DTOs
                         }
                 }
                 //knight
-                if(currentPlayer.CheckedByHowManyPiece == 0)
-                {
-                    LegalCheckSquares.Clear();
                     for(int r = -2 ; r < 3; r ++)
                     for(int f = -2; f < 3 ; f++)
                     {
-                        if((r != 0 && f !=0 && r/f!=1 && r/f != -1) && currentPlayer.CheckedByHowManyPiece == 0)
+                        if(r != 0 && f !=0 && r/f!=1 && r/f != -1)
                         {
-                            LegalCheckSquares.Clear();
                             targetrank = king.Rank + r;
                             targetfile = king.File + f;
                             if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                             {
                                 targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                LegalCheckSquares.Add(targetsquare);
+                                AddCheckSquare(targetsquare);
                                 if(targetsquare.OccupingPiece != "")
                                 {
                                     if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
@@ -538,7 +539,6 @@ namespace ChessWebsite.DTOs
                                         if(targetsquare.OccupingPiece[1] == 'N')
                                         {
                                             currentPlayer.CheckedByHowManyPiece += 1;
-                                            break;
                                         }
                                     }
                                     ClearCheckSquares();
@@ -548,27 +548,25 @@ namespace ChessWebsite.DTOs
                         }
                     }
                     //pawn
-                    if(currentPlayer.CheckedByHowManyPiece == 0)
-                    {
-                        LegalCheckSquares.Clear();
                         for(int r = -1; r <= 1; r+=2)
                             for(int f = -1; f <= 1; f+=2)
                             {
-                                LegalCheckSquares.Clear();
+                                    ClearCheckSquares();
                                     targetrank = king.Rank + r;
                                     targetfile = king.File + f;
                                     if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                                     {
                                         targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                        LegalCheckSquares.Add(targetsquare);
-                                        if(GameManager.isWhiteTurn && r == 1  && currentPlayer.CheckedByHowManyPiece == 0)
+                                        if(currentPlayer.CheckedByHowManyPiece == 0)
+                                            AddCheckSquare(targetsquare);
+                                        if(GameManager.isWhiteTurn && r == 1)
                                         {
                                             if(targetsquare.OccupingPiece == "bP")
                                                 currentPlayer.CheckedByHowManyPiece += 1;
                                         }
                                         else
                                         {
-                                            if(!GameManager.isWhiteTurn && r == -1 && currentPlayer.CheckedByHowManyPiece == 0)
+                                            if(!GameManager.isWhiteTurn && r == -1)
                                             {
                                                 if(targetsquare.OccupingPiece == "wP")
                                                     currentPlayer.CheckedByHowManyPiece += 1;
@@ -577,8 +575,6 @@ namespace ChessWebsite.DTOs
                                 }
                                 ClearCheckSquares();
                             }
-                    }
-                }
                 if(GameManager.isWhiteTurn)
                 {
                     if(Board.GetSquareByName("h1").OccupingPiece != "wR")
@@ -595,11 +591,12 @@ namespace ChessWebsite.DTOs
                 }
 
         }
-        public void isPinned(Square pinnedsquare, int r, int f, int length)// r and f are directions
+        private void isPinned(Square pinnedsquare, int r, int f, int length)// r and f are directions
         {
             int targetrank;
             int targetfile;
             Square targetsquare;
+            if(LegalPinSquares.Count==0)
             for(int l = 1; l<9-length; l++)
             {
                 targetrank = pinnedsquare.Rank + r*l;
@@ -607,6 +604,7 @@ namespace ChessWebsite.DTOs
                 if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                 {
                     targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                    LegalPinSquares.Add(targetsquare);
                     if(targetsquare.OccupingPiece != "")
                     {
                         if(targetsquare.OccupingPiece[0] != pinnedsquare.OccupingPiece[0])
@@ -623,12 +621,14 @@ namespace ChessWebsite.DTOs
                                 }
 
                             }
+                            if(!pinnedsquare.isPinned)
+                                LegalPinSquares.Clear();
                             break;
                     }
                 }
             }
         }
-        void CastleShort(Square king)
+        private void CastleShort(Square king)
         {
             if(currentPlayer.CanCastleShort && currentPlayer.CheckedByHowManyPiece == 0)
             {
@@ -652,7 +652,7 @@ namespace ChessWebsite.DTOs
                 }
             }
         }
-        void CastleLong(Square king)
+        private void CastleLong(Square king)
         {
             if(currentPlayer.CanCastleLong && currentPlayer.CheckedByHowManyPiece == 0)
             {
@@ -676,12 +676,17 @@ namespace ChessWebsite.DTOs
                 }
             }
         }
-        public void ClearCheckSquares()
+        private void ClearCheckSquares()
         {
             if(currentPlayer.CheckedByHowManyPiece != 1)
                 LegalCheckSquares.Clear();
         }
-        public Player CurrentPlayer()
+        private void AddCheckSquare(Square targetsquare)
+        {
+            if(currentPlayer.CheckedByHowManyPiece == 0)
+                LegalCheckSquares.Add(targetsquare);
+        }
+        private Player CurrentPlayer()
         {
             if(GameManager.isWhiteTurn)
                 return WhitePlayer;

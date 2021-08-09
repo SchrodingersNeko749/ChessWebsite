@@ -30,3 +30,8 @@ function SendMoveToAPI(currentSquare, targetSquare, specialMove)
   //GetMoveFromAPI()
 })
 }
+function RestartGame(){
+  isWhiteMove = true
+  SetupBoard()
+  fetch("https://localhost:5001/Arena/RestartGame/")
+}

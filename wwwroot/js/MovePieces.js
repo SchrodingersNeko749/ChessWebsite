@@ -61,6 +61,7 @@ function DragStart(ev) {
   index = y*8 + x
   TargetedSquare = Board[index]
   LastMove = GetLegalMovebySquare(TargetedSquare.Name)
+  
   if(TargetedSquare != SelectedSquare && LastMove != undefined) //if destination square of the move exists in LegalSquares
   {
     switch (LastMove.specialMove) {

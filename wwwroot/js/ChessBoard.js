@@ -4,11 +4,12 @@ var PickedPiece
 
 function SetupBoard()
 {
+    document.body.style.backgroundColor="#a39483"
     //initiating the picked piece and modal
     PickedPiece = document.getElementById("picked-piece");
     PromotionModal = document.getElementById("PromotionModal");
     //if square elements exists setup pieces 
-    if (document.getElementsByClassName("grid-item").length == 64) {
+    if (document.getElementsByClassName("square").length == 64) {
         SetupPieces()
     } else {
         //setup board array
@@ -24,7 +25,7 @@ function SetupBoard()
         filenamemap[6] = 'g';
         filenamemap[7] = 'h';
         //adding the first square object to the board array. this firstSquare element will be used to clone other 63 squares
-        firstSquare = document.getElementsByClassName("grid-item")[0]
+        firstSquare = document.getElementsByClassName("square")[0]
 
         Board.push(new Square("a8", "", firstSquare))
         for (let i = 1; i < 64; i++) 
@@ -36,7 +37,7 @@ function SetupBoard()
             name = file + rank
     
             squareElement = firstSquare.cloneNode(true)
-            document.getElementsByClassName("grid-container")[0].appendChild(squareElement);
+            document.getElementsByClassName("board")[0].appendChild(squareElement);
     
             s = new Square(name, "", squareElement)
             Board.push(s)    
@@ -175,15 +176,6 @@ function GetLegalMovebySquare(tragetsquarename)
     else
         console.log("ChessBoard.js.GetLegalMovebySquare : targetsquare not found")
     }
-function ModaiSelectPiece(modaiselectedpiece)
-{
-    pieceurl = 'url("'+ modaiselectedpiece.currentSrc.slice(22) + '")'
-    if(isWhiteMove)
-        pieceurl = pieceurl.replace(/w/, 'b')
-    PromotionModal.style.display = "none"
-    TargetedSquare.PieceElement.style.backgroundImage = pieceurl
-    SendMoveToAPI(SelectedSquare.Name, TargetedSquare.Name, ""+pieceurl[13]+pieceurl[14])
-}
 class Square
 {
     constructor(name, piece = "none", element)

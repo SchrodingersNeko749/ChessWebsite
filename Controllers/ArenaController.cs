@@ -28,6 +28,10 @@ namespace ChessWebsite.Controllers
         {
             Arena_GameManager.PlayMove(currentsquare,targetsquare, specialmove);
         }
+        public void RestartGame()
+        {
+            Arena_GameManager.RestartGame();
+        }
 
     }
 

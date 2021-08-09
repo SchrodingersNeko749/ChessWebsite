@@ -12,7 +12,7 @@ namespace ChessWebsite.DTOs
             SetupBoard();
             SetupPieces();
         }
-        private static void SetupPieces()
+        public static void SetupPieces()
         {
             // white pieces
             GetSquareByName("a1").OccupingPiece = "wR";
@@ -52,8 +52,9 @@ namespace ChessWebsite.DTOs
             GetSquareByName("g7").OccupingPiece = "bP";
             GetSquareByName("h7").OccupingPiece = "bP";
         }
-        private static void SetupBoard()
+        public static void SetupBoard()
         {
+            GameManager.isWhiteTurn = true;
             for (int i = 0; i < 64; i++)
             {
                 ChessBoard[i] = new Square(i);
