@@ -111,7 +111,6 @@ function DragStart(ev) {
     }
     PickedPiece.style.backgroundImage = "none"
     PickedPiece.style.top = Board[63].PieceElement.offsetTop + 128
-    isWhiteMove = !isWhiteMove
   }
   else{ // is not a legal move
     SelectedSquare.PieceElement.style.backgroundImage = PickedPiece.style.backgroundImage
@@ -121,28 +120,27 @@ function DragStart(ev) {
  }
  //------------------------------------------------------------------------
 // a function that computer uses to make a move
-function PlayMove(current_squarename, target_squarename)
+function PlayMove()
 {
-  console.log(current_squarename, target_squarename)
-  currentSquare = GetSquare(current_squarename)
-  targetSquare = GetSquare(target_squarename)
-  //if its white's move
-  //"url()"
-  if (isWhiteMove && currentSquare.PieceElement.style.backgroundImage[13] == 'w') {
-    targetSquare.PieceElement.style.backgroundImage = currentSquare.PieceElement.style.backgroundImage
-    currentSquare.PieceElement.style.backgroundImage = "none"
-    SendMoveToAPI(current_squarename, target_squarename)
+  move = LegalMoves[0]
+  console.log(move.currentSquare.name, move.targetSquare.name)
+  CurrentSquare = GetSquare(move.currentSquare.name)
+  TargetSquare = GetSquare(move.targetSquare.name)
+
+  switch (move.specialMove) {
+    case "promotion":
+      pieces = "RBNQ" // ROOK, BISHOP, KNIGHT(N), QUEEN
+      piece = move.currentSquare.name[0] + pieces[Math.random()]
+      CurrentSquare.PieceElement.style.backgroundImage = "none"
+      TargetSquare.PieceElement.style.backgroundImage = "url(/Pieces/"+piece+".png)"
+    break;
+  
+    default:
+      TargetSquare.PieceElement.style.backgroundImage = CurrentSquare.PieceElement.style.backgroundImage
+      CurrentSquare.PieceElement.style.backgroundImage = "none"
+      break;
   }
-  else{
-    //if its black's move
-    if(!isWhiteMove && currentSquare.PieceElement.style.backgroundImage[13] == 'b'){
-    targetSquare.PieceElement.style.backgroundImage = currentSquare.PieceElement.style.backgroundImage
-    currentSquare.PieceElement.style.backgroundImage = "none"
-    SendMoveToAPI(current_squarename, target_squarename)
-    }
-    else
-      console.log("its not your move")
-  }
-  isWhiteMove = !isWhiteMove
+
+  SendMoveToAPI(move.currentSquare.name, move.targetSquare.name, move.specialMove)
 }
  //------------------------------------------------------------------------

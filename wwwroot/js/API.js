@@ -4,16 +4,30 @@ function GetMoveFromAPI(currentSquare)
   fetch(url)
   .then(res => res.json())
   .then(data => {
+    if(data.length == 0)
+      alert("Game Over")
     LegalMoves.splice(0, LegalMoves.length)
     data.forEach(move => {
       LegalMoves.push(move)
-      if(move.specialMove == "blockcheck")
-        ColorSquare(move.targetSquare.name, "red")
-      else
-        ColorSquare(move.targetSquare.name, "rgba(232, 199, 109,0.4)")
+      
+      if(isWhiteMove)
+      {
+        if(move.specialMove == "blockcheck")
+          ColorSquare(move.targetSquare.name, "red")
+        else
+          ColorSquare(move.targetSquare.name, "rgba(232, 199, 109,0.4)")
+        
+      }
     });
   })
+  .then(function(){
+    if(!isWhiteMove)
+    {
+      PlayMove()
+    }
+  })
 }
+//---------------------------------------------------------------
 function SendMoveToAPI(currentSquare, targetSquare, specialMove)
 {
   let move = new FormData()
@@ -24,20 +38,30 @@ function SendMoveToAPI(currentSquare, targetSquare, specialMove)
       method: 'POST',
       body: move
 })
+.then(function(){
+  
+  isWhiteMove = !isWhiteMove
+  if(!isWhiteMove)
+  {
+    GetMoveFromAPI()
+    console.log("after i change isWhiteMove:" + isWhiteMove)
+  }
+})
 }
+//---------------------------------------------------------------
 function RestartGame(){
   fetch("https://localhost:5001/Arena/RestartGame/")
   .then(res =>{
-      console.log(res.status)
       if(res.status == 200)
       {
-        console.log("Success: "+ res.statusText)
+        console.log("succesful"+res.status)
       }
   })
   .then(function(){
     LoadGame()
   })
 }
+//---------------------------------------------------------------
 function LoadGame(){
   fetch("https://localhost:5001/Arena/LoadGame/")
   .then(res => res.json())

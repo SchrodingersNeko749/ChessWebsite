@@ -15,13 +15,19 @@ namespace ChessWebsite.Controllers
         {
             return View();
         }
-        public void RestartGame()
+        public void RestartGame(string whitename, string blackname)
         {
-            Arena_GameManager.RestartGame();
+            Arena_GameManager.RestartGame(whitename, blackname);
         }
+        //GET
         public Square[] LoadGame()
         {
             return Board.ChessBoard;
+        }
+        //PUT
+        public void StartGame()
+        {
+
         }
 
     }

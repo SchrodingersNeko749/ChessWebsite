@@ -17,11 +17,9 @@ using System;
          public Move(Square currentsquare, Square targetsquare, bool check){
              CurrentSquare = currentsquare;
              TargetSquare = targetsquare;
-             Check = check;
          }
          public Square CurrentSquare { get; set; }
          public Square TargetSquare { get; set; }
          public string SpecialMove {get; set;} //promotion and castle
-         public bool Check {get; set;}
      }
  }

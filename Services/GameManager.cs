@@ -13,26 +13,42 @@ namespace ChessWebsite.Services
         {
             chessLogic = new ChessLogic(new Player ("whitename"), new Player ("blackname") );
         }
-        public void RestartGame()
+        public void RestartGame(string whitename, string blackname)
         {
             Board.SetupBoard();
             Board.SetupPieces();
-            chessLogic = new ChessLogic(new Player ("whitename"), new Player ("blackname") );
+            chessLogic = new ChessLogic(new Player (whitename), new Player (blackname) );
         }
-        public Move RandomMove()
+        public Move RandomMoveForPlayer(char playercolor)
         {
-            chessLogic.CalculateLegalMoves();
-            return ChessLogic.LegalMoves[Random.RandomNumber(ChessLogic.LegalMoves.Count)];
+            Move random_move = ChessLogic.LegalMoves[Random.RandomNumber(ChessLogic.LegalMoves.Count)];
+            if(ChessLogic.LegalMoves.Count == 0) 
+                return random_move;
+            bool isCorrectColor = false;
+            while(!isCorrectColor)
+            {
+                random_move = ChessLogic.LegalMoves[Random.RandomNumber(ChessLogic.LegalMoves.Count)];
+                if(random_move.CurrentSquare.OccupingPiece[0] == playercolor)
+                    isCorrectColor = true;
+            }
+            return random_move;
         }
         public List<Move> LegalMovesForPiece(string currentsquarename)
         {
             List<Move> LegalListSubset = new List<Move>();
 
             chessLogic.CalculateLegalMoves();
-            foreach (var mv in ChessLogic.LegalMoves)
+            if(!isWhiteTurn)
             {
-                if(mv.CurrentSquare.Name == currentsquarename)
-                    LegalListSubset.Add(mv);
+                LegalListSubset.Add(RandomMoveForPlayer('b'));
+            }
+            else
+            {
+                foreach (var mv in ChessLogic.LegalMoves)
+                {
+                    if(mv.CurrentSquare.Name == currentsquarename)
+                        LegalListSubset.Add(mv);
+                }
             }
             return LegalListSubset;
         }
