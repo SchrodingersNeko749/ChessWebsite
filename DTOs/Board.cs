@@ -4,11 +4,10 @@ namespace ChessWebsite.DTOs
 {
     public static class Board
     {
-        public static Square[] ChessBoard = new Square[64];
-        public static Player WhitePlayer {get;set;}
-        public static Player BlackPlayer {get;set;}
+        public static Square[] ChessBoard {get;set;}
         static Board ()
         {
+            ChessBoard = new Square[64];
             SetupBoard();
             SetupPieces();
         }

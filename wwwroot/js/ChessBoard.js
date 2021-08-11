@@ -1,149 +1,59 @@
+var ServerBoard = []
 let Board = []
-var PromotionModal;
+var PromotionModal
 var PickedPiece
+var bar = []
 
 function SetupBoard()
 {
+    isWhiteMove = true
     document.body.style.backgroundColor="#a39483"
     //initiating the picked piece and modal
     PickedPiece = document.getElementById("picked-piece");
     PromotionModal = document.getElementById("PromotionModal");
-    //if square elements exists setup pieces 
-    if (document.getElementsByClassName("square").length == 64) {
-        SetupPieces()
-    } else {
-        //setup board array
-        Board.splice(0,Board.length)
-        //this is to name square names. i need to map a number to alphabet
-        filenamemap = []
-        filenamemap[0] = 'a';
-        filenamemap[1] = 'b';
-        filenamemap[2] = 'c';
-        filenamemap[3] = 'd';
-        filenamemap[4] = 'e';
-        filenamemap[5] = 'f';
-        filenamemap[6] = 'g';
-        filenamemap[7] = 'h';
-        //adding the first square object to the board array. this firstSquare element will be used to clone other 63 squares
-        firstSquare = document.getElementsByClassName("square")[0]
 
-        Board.push(new Square("a8", "", firstSquare))
-        for (let i = 1; i < 64; i++) 
-        {   
-            file = i % 8
-            rank = Math.floor(((63 - i)/8) + 1) 
-            file = filenamemap[file]
-            rank = "" + rank.toString()
-            name = file + rank
-    
-            squareElement = firstSquare.cloneNode(true)
-            document.getElementsByClassName("board")[0].appendChild(squareElement);
-    
-            s = new Square(name, "", squareElement)
-            Board.push(s)    
+    //adding the first square object to the board array. this firstSquare element will be used to clone other 63 squares
+    firstSquare = document.getElementsByClassName("square")[0]
+    firstSquare.style.backgroundImage = "url(/Pieces/bR.png)"
+
+    for(let i = 0; i < 64 ;i++)
+    {
+        //cloning the first square
+        squareElement = firstSquare.cloneNode(true)
+        // we make the right index
+        index = 63 -i
+        r = Math.floor(index/8)
+        f = 7 - index % 8
+        index = r*8 + f
+        // making the square from server data
+        squarename = ServerBoard[index].name
+        piece = ServerBoard[index].occupingPiece
+        if(piece != "")
+            squareElement.style.backgroundImage = "url(/Pieces/"+piece+".png)"
+        else
+            squareElement.style.backgroundImage = "none"
+        s = new Square(squarename, piece, squareElement)
+        if(Board.length<64)  // means its the first time this array is being filled 
+        {
+            if(i == 0) // when filling the array the first i is the firstSquare, an element hard coded in html
+            {
+                s.PieceElement = firstSquare
+                Board.push(s)
+            }
+            else // fill array based on server array
+            {
+                document.getElementsByClassName("board")[0].appendChild(squareElement);
+                Board.push(s)
+            }
         }
-        SetupPieces()
-        //GetMoveFromAPI()
+         else //replace elements 
+         {
+            Board[i].Piece = piece
+            Board[i].PieceElement.style.backgroundImage = squareElement.style.backgroundImage
+         }
     }
 }
-function SetupPieces() {
-    //making every square between 3rd rank and 5th rank empty
-    for (let i = 16; i < 48; i++) {
-        Board[i].Piece = ""
-        Board[i].PieceElement.style.backgroundImage = "none"
-    }
-    //two black rooks
-    //bR
-    Board[0].Piece = "bR"
-    Board[0].PieceElement.style.backgroundImage = "url(/Pieces/bR.png)";
-    Board[7].Piece = "bR"
-    Board[7].PieceElement.style.backgroundImage = "url(/Pieces/bR.png)";
-    //two black knights
-    Board[1].Piece = "bN"
-    Board[1].PieceElement.style.backgroundImage = "url(/Pieces/bN.png)";
-    Board[6].Piece = "bN"
-    Board[6].PieceElement.style.backgroundImage = "url(/Pieces/bN.png)";
-    //two black bishops
-    Board[2].Piece = "bB"
-    Board[2].PieceElement.style.backgroundImage = "url(/Pieces/bB.png)";
-    Board[5].Piece = "bB"
-    Board[5].PieceElement.style.backgroundImage = "url(/Pieces/bB.png)";
-    //black queen and king
-    Board[3].Piece = "bQ"
-    Board[3].PieceElement.style.backgroundImage = "url(/Pieces/bQ.png)";
-    Board[4].Piece = "bK"
-    Board[4].PieceElement.style.backgroundImage = "url(/Pieces/bK.png)";
-    //black pawns
-    Board[8].Piece = "bP"
-    Board[8].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
 
-    Board[9].Piece = "bP"
-    Board[9].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
-
-    Board[10].Piece = "bP"
-    Board[10].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
-
-    Board[11].Piece = "bP"
-    Board[11].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
-
-    Board[12].Piece = "bP"
-    Board[12].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
-
-    Board[13].Piece = "bP"
-    Board[13].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
-
-    Board[14].Piece = "bP"
-    Board[14].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
-
-    Board[15].Piece = "bP"
-    Board[15].PieceElement.style.backgroundImage = "url(/Pieces/bP.png)";
-    
-    //two white rooks
-    Board[63].Piece = "wR"
-    Board[63].PieceElement.style.backgroundImage = "url(/Pieces/wR.png)";
-    Board[63-7].Piece = "wR"
-    Board[63-7].PieceElement.style.backgroundImage = "url(/Pieces/wR.png)";
-    //two white knights
-    Board[63-1].Piece = "wN"
-    Board[63-1].PieceElement.style.backgroundImage = "url(/Pieces/wN.png)";
-    Board[63-6].Piece = "wN"
-    Board[63-6].PieceElement.style.backgroundImage = "url(/Pieces/wN.png)";
-    //two white bishops
-    Board[63-2].Piece = "wB"
-    Board[63-2].PieceElement.style.backgroundImage = "url(/Pieces/wB.png)";
-    Board[63-5].Piece = "wB"
-    Board[63-5].PieceElement.style.backgroundImage = "url(/Pieces/wB.png)";
-    //white queen and king
-    Board[63-4].Piece = "wQ"
-    Board[63-4].PieceElement.style.backgroundImage = "url(/Pieces/wQ.png)";
-
-    Board[63-3].Piece = "wK"
-    Board[63-3].PieceElement.style.backgroundImage = "url(/Pieces/wK.png)";
-    //white pawns
-    Board[63-8].Piece = "wP"
-    Board[63-8].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
-
-    Board[63-9].Piece = "wP"
-    Board[63-9].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
-
-    Board[63-10].Piece = "wP"
-    Board[63-10].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
-
-    Board[63-11].Piece = "wP"
-    Board[63-11].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
-
-    Board[63-12].Piece = "wP"
-    Board[63-12].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
-
-    Board[63-13].Piece = "wP"
-    Board[63-13].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
-
-    Board[63-14].Piece = "wP"
-    Board[63-14].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
-
-    Board[63-15].Piece = "wP"
-    Board[63-15].PieceElement.style.backgroundImage = "url(/Pieces/wP.png)";
-}
 function GetSquare(squarename)
 {
     for (let i = 0; i < Board.length; i++) {
@@ -173,8 +83,6 @@ function GetLegalMovebySquare(tragetsquarename)
     })
     if(foundmove != undefined)
         return foundmove;
-    else
-        console.log("ChessBoard.js.GetLegalMovebySquare : targetsquare not found")
     }
 class Square
 {
@@ -184,7 +92,7 @@ class Square
         this.Piece = piece
         this.PieceElement = element
     }
-    Piece = ""
+    Piece = "none"
     Name
     PieceElement
 }

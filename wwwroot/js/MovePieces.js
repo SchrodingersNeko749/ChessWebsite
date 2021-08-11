@@ -7,14 +7,14 @@ let promotingpiece = ""
 //------------------------------------------------------------------------
 function Drag(ev)//on drag over
 {
-  PickedPiece.style.top = ev.clientY - 64
-  PickedPiece.style.left = ev.clientX - 64
+  PickedPiece.style.top = ev.clientY - 50
+  PickedPiece.style.left = ev.clientX - 50
 }
 //------------------------------------------------------------------------
 function DragStart(ev) {
   //find the Selected square
-  x = Math.floor((ev.clientX - Board[0].PieceElement.offsetLeft) / 128)
-  y = Math.floor((ev.clientY - Board[0].PieceElement.offsetTop) / 128)
+  x = Math.floor((ev.clientX - Board[0].PieceElement.offsetLeft) / 100)
+  y = Math.floor((ev.clientY - Board[0].PieceElement.offsetTop) / 100)
 
   index = y*8 + x
   //only get moves from api if the selected square is currenntly empty (no square has been touched) or if the selected square has changed (touching different pieces)
@@ -55,8 +55,8 @@ function DragStart(ev) {
   document.onmouseup = null
   document.onmousemove = null
   
-  x = Math.floor((ev.clientX - Board[0].PieceElement.offsetLeft) / 128)
-  y = Math.floor((ev.clientY - Board[0].PieceElement.offsetTop) / 128)
+  x = Math.floor((ev.clientX - Board[0].PieceElement.offsetLeft) / 100)
+  y = Math.floor((ev.clientY - Board[0].PieceElement.offsetTop) / 100)
 
   index = y*8 + x
   TargetedSquare = Board[index]

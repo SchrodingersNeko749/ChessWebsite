@@ -1,6 +1,6 @@
 function GetMoveFromAPI(currentSquare)
 {
-  url = "https://localhost:5001/Arena/GetMove/?currentsquare="+currentSquare
+  url = "https://localhost:5001/GameManager/GetMove/?currentsquare="+currentSquare
   fetch(url)
   .then(res => res.json())
   .then(data => {
@@ -12,7 +12,6 @@ function GetMoveFromAPI(currentSquare)
       else
         ColorSquare(move.targetSquare.name, "rgba(232, 199, 109,0.4)")
     });
-    //ColorLegalSquares()
   })
 }
 function SendMoveToAPI(currentSquare, targetSquare, specialMove)
@@ -21,17 +20,31 @@ function SendMoveToAPI(currentSquare, targetSquare, specialMove)
   move.append("currentsquare",currentSquare)
   move.append("targetsquare",targetSquare)
   move.append("specialmove", specialMove)
-  fetch("https://localhost:5001/Arena/SendMove/",{
+  fetch("https://localhost:5001/GameManager/SendMove/",{
       method: 'POST',
       body: move
 })
-.then(response =>{
-  console.log('Success:', JSON.stringify(response))
-  //GetMoveFromAPI()
-})
 }
 function RestartGame(){
-  isWhiteMove = true
-  SetupBoard()
   fetch("https://localhost:5001/Arena/RestartGame/")
+  .then(res =>{
+      console.log(res.status)
+      if(res.status == 200)
+      {
+        console.log("Success: "+ res.statusText)
+      }
+  })
+  .then(function(){
+    LoadGame()
+  })
+}
+function LoadGame(){
+  fetch("https://localhost:5001/Arena/LoadGame/")
+  .then(res => res.json())
+  .then(data => {
+    ServerBoard = data.slice()
+  })
+  .then(function() {
+    SetupBoard()
+});
 }

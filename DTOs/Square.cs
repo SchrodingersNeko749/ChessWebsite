@@ -1,3 +1,4 @@
+using System;
 namespace ChessWebsite.DTOs
 {
     //------------------------
@@ -5,17 +6,16 @@ namespace ChessWebsite.DTOs
     {
          public Square(int num)
          {
-            Rank = num / 8;
-            File = num % 8;
-            SquareIndex = Rank*8 + File;
+            OccupingPiece = "";
+            Rank = Convert.ToByte(num / 8);
+            File = Convert.ToByte(num % 8);
             Name = SquareName(num);
             Targetedby = new char[2];
          }
         public string Name {get; set;}
-        public string OccupingPiece = "";
-        public int Rank {get; set;}
-        public int File {get; set;}
-        public int SquareIndex {get; set;}
+        public string OccupingPiece {get;set;}
+        public byte Rank {get; set;}
+        public byte File {get; set;}
         public char[] Targetedby {get; set;}
         public bool isPinned{get;set;}
         private string SquareName(int number)
