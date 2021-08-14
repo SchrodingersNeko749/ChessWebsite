@@ -11,26 +11,19 @@ namespace ChessWebsite.Services
         public ChessLogic chessLogic;//entity that calculates legal moves 
         public GameManager()
         {
-            chessLogic = new ChessLogic(new Player ("whitename"), new Player ("blackname") );
+            chessLogic = new ChessLogic(new Player ("whitename", 'w'), new Player ("blackname", 'b') );
         }
         public void RestartGame(string whitename, string blackname)
         {
             Board.SetupBoard();
             Board.SetupPieces();
-            chessLogic = new ChessLogic(new Player (whitename), new Player (blackname) );
+            chessLogic = new ChessLogic(new Player (whitename, 'w'), new Player (blackname, 'b') );
         }
         public Move RandomMoveForPlayer(char playercolor)
         {
-            Move random_move = ChessLogic.LegalMoves[Random.RandomNumber(ChessLogic.LegalMoves.Count)];
             if(ChessLogic.LegalMoves.Count == 0) 
-                return random_move;
-            bool isCorrectColor = false;
-            while(!isCorrectColor)
-            {
-                random_move = ChessLogic.LegalMoves[Random.RandomNumber(ChessLogic.LegalMoves.Count)];
-                if(random_move.CurrentSquare.OccupingPiece[0] == playercolor)
-                    isCorrectColor = true;
-            }
+                return null;
+            Move random_move = ChessLogic.LegalMoves[Random.RandomNumber(ChessLogic.LegalMoves.Count)];
             return random_move;
         }
         public List<Move> LegalMovesForPiece(string currentsquarename)

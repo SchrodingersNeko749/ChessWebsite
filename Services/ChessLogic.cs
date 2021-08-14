@@ -65,7 +65,9 @@ namespace ChessWebsite.DTOs
                     break;
                 }       
             }
+            if(GameManager.isWhiteTurn)
                 CalculateKingMoves(whiteking);
+            else
                 CalculateKingMoves(blackking);
         }
          private void CalculatePawnMoves(Square pawn)
@@ -372,9 +374,10 @@ namespace ChessWebsite.DTOs
                                 targetsquare.AddToTargetedBy(king.OccupingPiece[0]);
                         }
                     }
-            
-            CastleShort(king);
-            CastleLong(king);
+            if(currentPlayer.CanCastleShort)
+                CastleShort(king);
+            if(currentPlayer.CanCastleLong)
+                CastleLong(king);
         }
         private void CalculateKingTargetSquares(Square king)
         {
@@ -405,7 +408,7 @@ namespace ChessWebsite.DTOs
 
             if(m.CurrentSquare.OccupingPiece[1] != 'P') 
                 m.TargetSquare.AddToTargetedBy(m.CurrentSquare.OccupingPiece[0]);
-            
+            if(m.CurrentSquare.OccupingPiece[0] == currentPlayer.Color)
             switch (currentPlayer.CheckedByHowManyPiece)
             {
                 case 0:
@@ -422,7 +425,7 @@ namespace ChessWebsite.DTOs
                         LegalMoves.Add(m);
                     if(LegalCheckSquares.Contains(m.TargetSquare))
                         {
-                            m.SpecialMove = "blockcheck"; // wont be in bool api
+                            m.SpecialMove = "blockcheck";
                             if(!m.CurrentSquare.isPinned)
                                 LegalMoves.Add(m);
                         }
@@ -435,6 +438,7 @@ namespace ChessWebsite.DTOs
         }
         public static Move GetMoveBySquareNames(string currentsquare, string targetsquare)
         {
+            LegalMoves = LegalMoves.Distinct().ToList();
             return LegalMoves.SingleOrDefault(mv => mv.CurrentSquare.Name == currentsquare &&  mv.TargetSquare.Name == targetsquare);
         }
         private void KingCondition(Square king)
@@ -446,79 +450,79 @@ namespace ChessWebsite.DTOs
             for(int f = -1; f <= 1; f++)
                 for(int r = -1 ; r <= 1; r ++)
                 {
-                        if(r != 0 || f != 0) // queen
+                    if(r != 0 || f != 0) // queen
+                    {
+                        for(int length = 1; length<9 ; length++)
                         {
-                            for(int length = 1; length<9 ; length++)
+                            targetrank = king.Rank + r*length;
+                            targetfile = king.File + f*length;
+                            if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                             {
-                                targetrank = king.Rank + r*length;
-                                targetfile = king.File + f*length;
-                                if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                                targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                AddCheckSquare(targetsquare);
+                                if(targetsquare.OccupingPiece != "")
                                 {
-                                    targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                    AddCheckSquare(targetsquare);
-                                    if(targetsquare.OccupingPiece != "")
+                                    if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
                                     {
-                                        if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
-                                        {
-                                            if(targetsquare.OccupingPiece[1] == 'Q')
-                                                currentPlayer.CheckedByHowManyPiece += 1;
-                                        }
-                                        else
-                                        {
-                                            isPinned(targetsquare, r, f, length);
-                                        }
-                                        ClearCheckSquares();
-                                        break;
+                                        if(targetsquare.OccupingPiece[1] == 'Q')
+                                            currentPlayer.CheckedByHowManyPiece += 1;
                                     }
+                                    else
+                                    {
+                                        isPinned(targetsquare, r, f, length);
+                                    }
+                                    ClearCheckSquares();
+                                    break;
                                 }
                             }
                         }
-                        if(r != 0 & f != 0) // bishop
+                    }
+                    if(r != 0 & f != 0) // bishop
+                    {
+                        for(int length = 1; length<9 ; length++)
                         {
-                            for(int length = 1; length<9 ; length++)
+                            targetrank = king.Rank + r*length;
+                            targetfile = king.File + f*length;
+                            if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                             {
-                                targetrank = king.Rank + r*length;
-                                targetfile = king.File + f*length;
-                                if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                                targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                AddCheckSquare(targetsquare);
+                                if(targetsquare.OccupingPiece != "")
                                 {
-                                    targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                    AddCheckSquare(targetsquare);
-                                    if(targetsquare.OccupingPiece != "")
+                                    if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
                                     {
-                                        if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
-                                        {
-                                            if(targetsquare.OccupingPiece[1] == 'B')
-                                                currentPlayer.CheckedByHowManyPiece += 1;
-                                        }
-                                        ClearCheckSquares();
-                                        break;
+                                        if(targetsquare.OccupingPiece[1] == 'B')
+                                            currentPlayer.CheckedByHowManyPiece += 1;
                                     }
+                                    ClearCheckSquares();
+                                    break;
                                 }
                             }
                         }
-                        if(r!=f && (r +f) != 0) //Rook
+                    }
+                    if(r!=f && (r +f) != 0) //Rook
+                    {
+                        for(int length = 1; length<9 ; length++)
                         {
-                            for(int length = 1; length<9 ; length++)
+                            targetrank = king.Rank + r*length;
+                            targetfile = king.File + f*length;
+                            if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
                             {
-                                targetrank = king.Rank + r*length;
-                                targetfile = king.File + f*length;
-                                if(targetrank >= 0 && targetrank < 8 && targetfile >= 0 && targetfile < 8)
+                                targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
+                                AddCheckSquare(targetsquare);
+                                if(targetsquare.OccupingPiece != "")
                                 {
-                                    targetsquare = Board.GetSquareByRankAndFile(targetrank, targetfile);
-                                    AddCheckSquare(targetsquare);
-                                    if(targetsquare.OccupingPiece != "")
+                                    if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
                                     {
-                                        if(targetsquare.OccupingPiece[0] != king.OccupingPiece[0])
-                                        {
-                                            if(targetsquare.OccupingPiece[1] == 'R')
-                                                currentPlayer.CheckedByHowManyPiece += 1;
-                                        }
-                                        ClearCheckSquares();
-                                        break;
+                                        if(targetsquare.OccupingPiece[1] == 'R')
+                                            currentPlayer.CheckedByHowManyPiece += 1;
                                     }
+                                    ClearCheckSquares();
+                                    break;
                                 }
                             }
                         }
+                    }
                 }
                 //knight
                     for(int r = -2 ; r < 3; r ++)

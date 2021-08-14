@@ -65,7 +65,10 @@ namespace ChessWebsite.DTOs
         }
         public static Square GetSquareByRankAndFile(int rank, int file)
         {
-            return ChessBoard[rank*8 + file];
+            if(rank < 8 && rank >= 0 && file >=0 && file <8 )
+                return ChessBoard[rank*8 + file];
+            else
+                return null;
         }
     }
 }

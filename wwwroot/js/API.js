@@ -4,8 +4,6 @@ function GetMoveFromAPI(currentSquare)
   fetch(url)
   .then(res => res.json())
   .then(data => {
-    if(data.length == 0)
-      alert("Game Over")
     LegalMoves.splice(0, LegalMoves.length)
     data.forEach(move => {
       LegalMoves.push(move)
